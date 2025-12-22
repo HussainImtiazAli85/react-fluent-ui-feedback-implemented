@@ -1,0 +1,75 @@
+/* rtl.css - Add this file and import it only when the language is Arabic (rtl) */
+
+body[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Example: Flip flex row direction for RTL */
+.rtl-row {
+  flex-direction: row-reverse !important;
+}
+
+/* Example: Align text to right for RTL */
+.rtl-text {
+  text-align: right !important;
+}
+
+/* Example: Override padding/margin if needed */
+.rtl-padding {
+  padding-left: 0 !important;
+  padding-right: 24px !important;
+}
+
+/* Example: Flip icon button arrows if needed */
+.rtl .ms-Button--icon .ms-Icon--ChevronLeft {
+  transform: rotate(180deg);
+}
+
+.view-all-link i {
+      transform: rotate(180deg);
+}
+
+/* Add more RTL-specific overrides as needed for your components */
+
+/* button.ms-Button.ms-Button--icon.quicklink-arrow.quicklink-arrow-left {
+    transform: rotate(180deg)!important;
+}
+
+button.ms-Button.ms-Button--icon.quicklink-arrow.quicklink-arrow-right{
+    transform: rotate(180deg)!important;
+} */
+
+.banner-slider-arrow-left {
+     transform: rotate(180deg);
+}
+
+.banner-slider-arrow-right {
+     transform: rotate(180deg);
+}
+
+.view-all-detail i{
+    transform: rotate(180deg);
+    position: relative;
+    top: 2px;
+    margin-right: 2px;
+}
+
+button.ms-Button.ms-Button--icon.quicklink-arrow.quicklink-arrow-left {
+    margin-left: -72px;
+}
+
+button.ms-Button.ms-Button--icon.quicklink-arrow.quicklink-arrow-right {
+    margin-left: 52px;
+}
+
+.footer-logo.css-180 {
+    gap: 10px;
+}
+
+
+
+.ms-ChoiceField-wrapper label::after {
+    right: auto!important;
+    left: 5px!important;
+}   

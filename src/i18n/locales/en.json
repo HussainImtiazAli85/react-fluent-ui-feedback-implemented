@@ -1,0 +1,187 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "departments": "Departments",
+    "resources": "Resources",
+    "contact": "Contact"
+  },
+  "header": {
+    "title": "Company Portal",
+    "subtitle": "Employee Intranet",
+    "search": "Search portal...",
+    "notifications": "Notifications",
+    "settings": "Settings"
+  },
+  "banner": {
+    "slide1": {
+      "title": "Welcome to Your Employee Portal",
+      "description": "Your central hub for company resources, news, and collaboration. Everything you need, all in one place."
+    },
+    "slide2": {
+      "title": "Stay Connected",
+      "description": "Access company news, events, and announcements instantly. Never miss important updates."
+    },
+    "slide3": {
+      "title": "Collaborate & Grow",
+      "description": "Connect with your team, access resources, and develop your career with us."
+    },
+    "slide4": {
+      "title": "Your Success Matters",
+      "description": "Discover tools and resources designed to help you succeed in your role."
+    },
+    "explore": "Explore Resources"
+  },
+  "quickLinks": {
+    "title": "Quick Links",
+    "hr": "HR Portal",
+    "it": "IT Support",
+    "calendar": "Calendar",
+    "benefits": "Benefits",
+    "learning": "Learning",
+    "directory": "Directory",
+    "policies": "Policies",
+    "feedback": "Feedback",
+    "employeeBenefits": "Employee Benefits",
+    "timeOff": "Request Time Off",
+    "payroll": "View Payslips",
+    "performance": "Reviews & Goals",
+    "learningResources": "Training Resources",
+    "itSupport": "Technical Help"
+  },
+  "quickAnnouncements": {
+    "title": "Quick Announcements",
+    "subtitle": "Stay updated with important notifications",
+    "viewAll": "View All",
+    "systemMaintenance": "System Maintenance",
+    "maintenanceMsg": "Scheduled maintenance tonight from 11 PM to 2 AM",
+    "newPolicy": "New Policy Update",
+    "policyMsg": "Updated remote work policy is now available",
+    "holidaySchedule": "Holiday Schedule",
+    "holidayMsg": "Office will be closed on Friday for public holiday",
+    "securityAlert": "Security Alert",
+    "securityMsg": "Please update your password before end of month",
+    "teamMeeting": "Team Meeting",
+    "meetingMsg": "All-hands meeting scheduled for next Monday at 10 AM"
+  },
+  "dashboardOverview": {
+    "title": "Dashboard Overview",
+    "subtitle": "Key metrics and recent activities",
+    "viewDetails": "View Details",
+    "activeProjects": "Active Projects",
+    "teamMembers": "Team Members",
+    "pendingTasks": "Pending Tasks",
+    "completed": "Completed",
+    "recentActivities": "Recent Activities",
+    "completedMilestone": "Completed project milestone",
+    "updatedReport": "Updated department report",
+    "addedMember": "Added new team member",
+    "scheduledMeeting": "Scheduled team meeting",
+    "approvedRequest": "Approved leave request"
+  },
+  "ceoMessage": {
+    "title": "Message from CEO",
+    "subtitle": "Leadership insights and company vision",
+    "name": "John Doe",
+    "position": "Chief Executive Officer",
+    "quote": "As we close this year and look ahead to 2026, I'm incredibly proud of what we've achieved together. Your dedication and innovation continue to drive our success.",
+    "paragraph1": "Our team has grown by 25% this year, we've launched three major products, and most importantly, we've maintained our commitment to excellence and customer satisfaction. Each one of you plays a vital role in this journey.",
+    "paragraph2": "Looking forward, we have exciting challenges ahead. Our focus on innovation, collaboration, and continuous improvement will guide us as we expand into new markets and strengthen our position as industry leaders.",
+    "keyFocus": "Key Focus Areas for 2026",
+    "focus1": "Expand our global presence in emerging markets",
+    "focus2": "Invest in cutting-edge technology and innovation",
+    "focus3": "Foster a culture of continuous learning and growth",
+    "focus4": "Strengthen our commitment to sustainability",
+    "likes": "likes",
+    "comments": "comments",
+    "readFull": "Read Full Message"
+  },
+  "departmentDetail": {
+    "departmentHead": "Department Head",
+    "ourMission": "Our Mission",
+    "services": "Services & Capabilities",
+    "keyTeam": "Key Team Members",
+    "teamMembers": "Team Members",
+    "established": "Est.",
+    "department1": {
+      "name": "Department 1",
+      "description": "Responsible for managing and developing innovative solutions for our clients",
+      "mission": "To deliver exceptional results through innovation and collaboration"
+    },
+    "department2": {
+      "name": "Department 2",
+      "description": "Focused on customer success and relationship management",
+      "mission": "To ensure customer satisfaction and drive business growth"
+    }
+  },
+  "news": {
+    "title": "News & Announcements",
+    "viewAll": "View All"
+  },
+  "events": {
+    "title": "Upcoming Events",
+    "subtitle": "Stay informed about important company events and activities",
+    "viewCalendar": "View All",
+    "learnMore": "Learn More"
+  },
+  "newHires": {
+    "title": "Welcome New Team Members",
+    "subtitle": "Join us in welcoming the newest additions to our team",
+    "welcome": "Welcome to the team!",
+    "joined": "Joined",
+    "viewAll": "View All"
+  },
+  "documents": {
+    "title": "Important Documents",
+    "subtitle": "Quick access to essential company resources and files",
+    "viewAll": "View All"
+  },
+  "survey": {
+    "title": "Quick Survey",
+    "subtitle": "Help us improve your experience by sharing your feedback",
+    "progress": "Progress",
+    "submit": "Submit Survey",
+    "thankYou": "Thank You!",
+    "successMessage": "Your feedback has been submitted successfully. We appreciate your time!",
+    "question1": "How satisfied are you with our intranet portal?",
+    "question2": "How easy is it to find information on the portal?",
+    "question3": "Which feature do you use most often?",
+    "verySatisfied": "Very Satisfied",
+    "satisfied": "Satisfied",
+    "neutral": "Neutral",
+    "dissatisfied": "Dissatisfied",
+    "veryEasy": "Very Easy",
+    "easy": "Easy",
+    "moderate": "Moderate",
+    "difficult": "Difficult",
+    "documents": "Documents",
+    "newsAnnouncements": "News & Announcements",
+    "eventsCalendar": "Events Calendar",
+    "employeeDirectory": "Employee Directory"
+  },
+  "footer": {
+    "copyright": "© 2024 Company Portal. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "support": "Support"
+  },
+  "theme": {
+    "title": "Theme Settings",
+    "default": "Default Blue",
+    "dark": "Dark Mode",
+    "teal": "Teal Theme"
+  },
+  "language": {
+    "title": "Language",
+    "english": "English",
+    "arabic": "Arabic"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel"
+  }
+}

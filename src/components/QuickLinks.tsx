@@ -1,0 +1,246 @@
+import { useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { supabase } from '../lib/supabase';
+import { QuickLink } from '../types/database';
+import {
+  Stack,
+  Text,
+  Icon,
+  IconButton,
+  mergeStyles,
+} from '@fluentui/react';
+
+const sectionStyles = mergeStyles({
+  padding: '32px 24px 24px',
+  backgroundColor: '#f3f2f1',
+  position: 'relative',
+});
+
+const containerStyles = mergeStyles({
+  maxWidth: '100%',
+  margin: '0 auto',
+});
+
+const cardStyles = mergeStyles({
+  backgroundColor: '#fff',
+  padding: '20px',
+  borderRadius: '8px',
+  textAlign: 'center',
+  cursor: 'pointer',
+  border: '1px solid #edebe9',
+  boxShadow: '0 1.6px 3.6px rgba(0, 0, 0, 0.13)',
+  transition: 'all 0.2s ease',
+  minWidth: '140px',
+  ':hover': {
+    boxShadow: '0 3.2px 7.2px rgba(0, 0, 0, 0.18)',
+    transform: 'translateY(-2px)',
+  },
+});
+
+const iconContainerStyles = mergeStyles({
+  width: '48px',
+  height: '48px',
+  borderRadius: '4px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  margin: '0 auto 16px',
+  backgroundColor: '#deecf9',
+  color: '#0078d4',
+  transition: 'all 0.2s ease',
+  '.card:hover &': {
+    backgroundColor: '#0078d4',
+    color: '#fff',
+  },
+});
+
+const sliderContainerStyles = mergeStyles({
+  position: 'relative',
+  overflow: 'hidden',
+  padding: '0 0',
+});
+
+const sliderStyles = mergeStyles({
+  display: 'flex',
+  gap: '21px',
+  transition: 'transform 0.3s ease',
+  overflowX: 'auto',
+  scrollbarWidth: 'none',
+  '::-webkit-scrollbar': {
+    display: 'none',
+  },
+});
+
+export default function QuickLinks() {
+  const { t } = useTranslation();
+  const [links, setLinks] = useState<QuickLink[]>([]);
+  const [loading, setLoading] = useState(true);
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetchQuickLinks();
+  }, []);
+
+  const fetchQuickLinks = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('quick_links')
+        .select('*')
+        .order('order_index', { ascending: true });
+
+      if (error) throw error;
+
+      const moreLinks = [
+        { id: 100, titleKey: 'quickLinks.employeeBenefits', description: '', icon: 'Heart', url: '#', order_index: 100 },
+        { id: 101, titleKey: 'quickLinks.timeOff', description: '', icon: 'calendar', url: '#', order_index: 101 },
+        { id: 102, titleKey: 'quickLinks.payroll', description: '', icon: 'Money', url: '#', order_index: 102 },
+        { id: 103, titleKey: 'quickLinks.performance', description: '', icon: 'Chart', url: '#', order_index: 103 },
+        { id: 104, titleKey: 'quickLinks.learningResources', description: '', icon: 'Education', url: '#', order_index: 104 },
+        { id: 105, titleKey: 'quickLinks.itSupport', description: '', icon: 'Settings', url: '#', order_index: 105 },
+      ];
+
+      setLinks([...(data || []), ...moreLinks as any]);
+    } catch (error) {
+      console.error('Error fetching quick links:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (sliderRef.current) {
+      const scrollAmount = 300;
+      sliderRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const getIconName = (iconName: string): string => {
+    const iconMap: Record<string, string> = {
+      'users': 'People',
+      'headphones': 'Headset',
+      'calendar': 'Calendar',
+      'heart': 'Heart',
+      'graduation-cap': 'Education',
+      'book-user': 'ContactCard',
+      'file-text': 'TextDocument',
+      'message-square': 'CommentSolid',
+      'link': 'Link',
+    };
+    return iconMap[iconName] || 'Link';
+  };
+
+  if (loading) {
+    return (
+      <section className={sectionStyles}>
+        <div className={containerStyles}>
+          <Stack horizontalAlign="center">
+            <Text variant="large">{t('common.loading')}</Text>
+          </Stack>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className={sectionStyles}>
+      <div className={containerStyles}>
+        <Stack tokens={{ childrenGap: 32 }}>
+          <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
+            {/* <Text
+              variant="xxLarge"
+              styles={{
+                root: {
+                  fontWeight: 600,
+                  color: '#323130',
+                  fontSize: '32px',
+                },
+              }}
+            >
+              {t('quickLinks.title')}
+            </Text> */}
+            <Stack horizontal tokens={{ childrenGap: 8 }}>
+              <IconButton
+                className="quicklink-arrow quicklink-arrow-left"
+                iconProps={{ iconName: 'ChevronLeft' }}
+                onClick={() => scroll('left')}
+                styles={{
+                  root: {
+                    backgroundColor: '#fff',
+                    border: '1px solid #edebe9',
+                  },
+                  rootHovered: {
+                    backgroundColor: '#f3f2f1',
+                  },
+                }}
+              />
+              <IconButton
+                className="quicklink-arrow quicklink-arrow-right"
+                iconProps={{ iconName: 'ChevronRight' }}
+                onClick={() => scroll('right')}
+                styles={{
+                  root: {
+                    backgroundColor: '#fff',
+                    border: '1px solid #edebe9',
+                  },
+                  rootHovered: {
+                    backgroundColor: '#f3f2f1',
+                  },
+                }}
+              />
+            </Stack>
+          </Stack>
+
+          <div className={sliderContainerStyles}>
+            <div ref={sliderRef} className={sliderStyles}>
+              {links.map((link) => (
+                <a
+                  key={link.id}
+                  href={link.url}
+                  className={`${cardStyles} card`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <div className={iconContainerStyles}>
+                    <Icon iconName={getIconName(link.icon)} styles={{ root: { fontSize: 24 } }} />
+                  </div>
+                  <Text
+                    variant="medium"
+                    styles={{
+                      root: {
+                        fontWeight: 600,
+                        color: '#323130',
+                        marginBottom: '4px',
+                        display: 'block',
+                      },
+                    }}
+                  >
+                    {(link as any).titleKey ? t((link as any).titleKey) : link.title}
+                  </Text>
+                  {link.description && (
+                    <Text
+                      variant="small"
+                      styles={{
+                        root: {
+                          color: '#605e5c',
+                          display: 'block',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                        },
+                      }}
+                    >
+                      {link.description}
+                    </Text>
+                  )}
+                </a>
+              ))}
+            </div>
+          </div>
+        </Stack>
+      </div>
+    </section>
+  );
+}
