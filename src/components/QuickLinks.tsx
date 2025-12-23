@@ -86,12 +86,12 @@ export default function QuickLinks() {
       if (error) throw error;
 
       const moreLinks = [
-        { id: 'local-100', title: '', description: '', titleKey: 'quickLinks.employeeBenefits', descriptionKey: 'quickLinks.employeeBenefitsDesc', icon: 'Heart', url: '#', order_index: 100, created_at: new Date().toISOString() },
-        { id: 'local-101', title: '', description: '', titleKey: 'quickLinks.timeOff', descriptionKey: 'quickLinks.timeOffDesc', icon: 'Calendar', url: '#', order_index: 101, created_at: new Date().toISOString() },
-        { id: 'local-102', title: '', description: '', titleKey: 'quickLinks.payroll', descriptionKey: 'quickLinks.payrollDesc', icon: 'Money', url: '#', order_index: 102, created_at: new Date().toISOString() },
-        { id: 'local-103', title: '', description: '', titleKey: 'quickLinks.performance', descriptionKey: 'quickLinks.performanceDesc', icon: 'Chart', url: '#', order_index: 103, created_at: new Date().toISOString() },
-        { id: 'local-104', title: '', description: '', titleKey: 'quickLinks.learningResources', descriptionKey: 'quickLinks.learningResourcesDesc', icon: 'Education', url: '#', order_index: 104, created_at: new Date().toISOString() },
-        { id: 'local-105', title: '', description: '', titleKey: 'quickLinks.itSupport', descriptionKey: 'quickLinks.itSupportDesc', icon: 'Settings', url: '#', order_index: 105, created_at: new Date().toISOString() },
+        { id: 'local-100', title: '', description: '', titleKey: 'quickLinks.employeeBenefits', icon: 'heart', url: '#', order_index: 100, created_at: new Date().toISOString() },
+        { id: 'local-101', title: '', description: '', titleKey: 'quickLinks.timeOff', icon: 'calendar', url: '#', order_index: 101, created_at: new Date().toISOString() },
+        { id: 'local-102', title: '', description: '', titleKey: 'quickLinks.payroll', icon: 'money', url: '#', order_index: 102, created_at: new Date().toISOString() },
+        { id: 'local-103', title: '', description: '', titleKey: 'quickLinks.performance', icon: 'chart', url: '#', order_index: 103, created_at: new Date().toISOString() },
+        { id: 'local-104', title: '', description: '', titleKey: 'quickLinks.learningResources', icon: 'graduation-cap', url: '#', order_index: 104, created_at: new Date().toISOString() },
+        { id: 'local-105', title: '', description: '', titleKey: 'quickLinks.itSupport', icon: 'headphones', url: '#', order_index: 105, created_at: new Date().toISOString() },
       ];
 
       setLinks([...(data || []), ...moreLinks]);
@@ -127,9 +127,25 @@ export default function QuickLinks() {
       'book-user': 'ContactCard',
       'file-text': 'TextDocument',
       'message-square': 'CommentSolid',
+      'money': 'Money',
+      'chart': 'BarChartVertical',
       'link': 'Link',
     };
     return iconMap[iconName] || 'Link';
+  };
+
+  const getTitleTranslationKey = (title: string): string | null => {
+    const titleMap: Record<string, string> = {
+      'HR Portal': 'quickLinks.hrPortal',
+      'IT Support': 'quickLinks.itSupportBackend',
+      'Time Off': 'quickLinks.timeOffBackend',
+      'Benefits': 'quickLinks.benefitsBackend',
+      'Training': 'quickLinks.training',
+      'Directory': 'quickLinks.directoryBackend',
+      'Policies': 'quickLinks.policiesBackend',
+      'Feedback': 'quickLinks.feedbackBackend',
+    };
+    return titleMap[title] || null;
   };
 
   if (loading) {
@@ -142,7 +158,7 @@ export default function QuickLinks() {
         </div>
       </section>
     );
-  }
+  }  
 
   return (
     <section className={sectionStyles}>
@@ -170,7 +186,11 @@ export default function QuickLinks() {
             />
             <div ref={sliderRef} className={sliderStyles} style={{ flex: 1, margin: '0 40px' }}>
               {links.map((link) => {
-                const label = link.titleKey ? t(link.titleKey) : link.title;
+                // First check if link has titleKey (local links)
+                // Then check if backend title has a translation mapping
+                // Finally fallback to raw title
+                const translationKey = link.titleKey || getTitleTranslationKey(link.title);
+                const label = translationKey ? t(translationKey) : link.title;
                 return (
                   <a
                     key={link.id}
@@ -193,8 +213,7 @@ export default function QuickLinks() {
                       }}
                     >
                       {label}
-                    </Text>
-                    {/* Description hidden as per request */}
+                    </Text>                    
                   </a>
                 );
               })}

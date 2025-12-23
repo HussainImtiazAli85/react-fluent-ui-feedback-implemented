@@ -63,14 +63,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* <div className={pageStyles.sectionGray}>
-        <div className={pageStyles.container}>
-          <div className={gridStyles}>
-            <Documents />
-          </div>
-        </div>
-      </div> */}
-
       <div className={pageStyles.sectionGray}>
         <div className={pageStyles.container}>
           <div className={gridStyles}>
