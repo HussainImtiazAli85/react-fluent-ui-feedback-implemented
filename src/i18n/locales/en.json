@@ -69,6 +69,10 @@
     "securityMsg": "Please update your password before end of month",
     "teamMeeting": "Team Meeting",
     "meetingMsg": "All-hands meeting scheduled for next Monday at 10 AM"
+    ,
+    "placeholderTitle": "Network Infrastructure Upgrade",
+    "placeholderMsg": "Scheduled upgrade on Saturday from 1 AM to 5 AM. Expect brief connectivity interruptions.",
+    "placeholderTime": "Today"
   },
   "dashboardOverview": {
     "title": "Dashboard Overview",
@@ -122,7 +126,33 @@
   },
   "news": {
     "title": "News & Announcements",
-    "viewAll": "View All"
+    "subtitle": "Stay updated with the latest company news and announcements",
+    "viewAll": "View All",
+    "readMore": "Read More",
+    "views": "views",
+    "categories": {
+      "announcement": "Announcement",
+      "update": "Update",
+      "event": "Event",
+      "alert": "Alert"
+    },
+    "demo": {
+      "welcomeQ4": {
+        "title": "Welcome to Q4 2025",
+        "excerpt": "We are excited to announce new initiatives for the last quarter of 2025.",
+        "content": "We are excited to announce new initiatives for the last quarter of 2025. Stay tuned for updates on company expansion and new projects."
+      },
+      "newOffice": {
+        "title": "New Office Opening",
+        "excerpt": "We are thrilled to announce the opening of our new office in Seattle!",
+        "content": "We are thrilled to announce the opening of our new office in Seattle! The new space will accommodate our growing team."
+      },
+      "wellness": {
+        "title": "Employee Wellness Program",
+        "excerpt": "Starting next month, we are launching a comprehensive wellness program.",
+        "content": "Starting next month, we are launching a comprehensive wellness program including gym memberships and mental health resources."
+      }
+    }
   },
   "events": {
     "title": "Upcoming Events",

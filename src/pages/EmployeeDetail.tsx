@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Stack, Text, Icon, IconButton, useTheme, mergeStyleSets, IStackTokens, Breadcrumb, IBreadcrumbItem, Persona, PersonaSize, DefaultButton } from '@fluentui/react';
+import { Stack, Text, Icon, IconButton, useTheme, mergeStyleSets, IStackTokens, Breadcrumb, IBreadcrumbItem, Persona, PersonaSize, DefaultButton, ITheme } from '@fluentui/react';
 import { supabase } from '../lib/supabase';
 import { NewHire } from '../types/database';
 
-const getStyles = (theme: any) => mergeStyleSets({
+const getStyles = (theme: ITheme) => mergeStyleSets({
   pageRoot: {
     backgroundColor: '#f3f2f1',
     minHeight: 'calc(100vh - 128px)',

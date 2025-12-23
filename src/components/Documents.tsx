@@ -3,7 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Document } from '../types/database';
-import { Stack, Text, Icon, useTheme, mergeStyleSets, IStackTokens, Link as FluentLink } from '@fluentui/react';
+import { Stack, Text, Icon, useTheme, mergeStyleSets, IStackTokens, Link as FluentLink, ITheme } from '@fluentui/react';
+
+const getFileTypeFromUrl = (url?: string | null) => {
+  const value = (url || '').trim();
+  const ext = value.includes('.') ? value.split('.').pop()!.toLowerCase() : '';
+  if (ext === 'pdf') return 'pdf';
+  if (ext === 'doc' || ext === 'docx') return 'word';
+  if (ext === 'xls' || ext === 'xlsx') return 'excel';
+  if (ext === 'ppt' || ext === 'pptx') return 'powerpoint';
+  if (ext === 'txt') return 'text';
+  return 'document';
+};
 
 const getDocIcon = (fileType: string) => {
   const iconMap: Record<string, string> = {
@@ -16,7 +27,7 @@ const getDocIcon = (fileType: string) => {
   return iconMap[fileType?.toLowerCase()] || 'Document';
 };
 
-const getStyles = (theme: any) => mergeStyleSets({
+const getStyles = (theme: ITheme) => mergeStyleSets({
   container: {
     backgroundColor: theme.palette.white,
     padding: '28px',
@@ -92,12 +103,6 @@ export default function Documents() {
       supabase.from('documents').select('*').limit(3).then(({ data }) => setDocuments(data || []));
     }, []);
 
-  const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-  };
-
   const getFileTypeColor = (fileType: string) => {
     const colorMap: Record<string, string> = {
       pdf: '#d32f2f',
@@ -129,7 +134,8 @@ export default function Documents() {
 
       <div className={styles.scrollContainer}>
         {documents.slice(0, 3).map((doc) => {
-          const fileColor = getFileTypeColor(doc.file_type);
+          const fileType = getFileTypeFromUrl(doc.file_url);
+          const fileColor = getFileTypeColor(fileType);
           return (
             <Stack
               key={doc.id}
@@ -157,7 +163,7 @@ export default function Documents() {
                   color: fileColor,
                 }}
               >
-                <Icon iconName={getDocIcon(doc.file_type)} styles={{ root: { fontSize: 24 } }} />
+                <Icon iconName={getDocIcon(fileType)} styles={{ root: { fontSize: 24 } }} />
               </div>
 
               <Stack tokens={contentTokens} styles={{ root: { flex: 1, position: 'relative', zIndex: 1 } }}>
@@ -175,11 +181,8 @@ export default function Documents() {
                       color: fileColor,
                     }}
                   >
-                    {doc.file_type || 'PDF'}
+                    {fileType === 'document' ? 'DOC' : fileType.toUpperCase()}
                   </div>
-                  <Text variant="small" styles={{ root: { color: theme.palette.neutralTertiary, fontSize: '11px' } }}>
-                    {formatFileSize(doc.file_size || 1024000)}
-                  </Text>
                 </Stack>
               </Stack>
 

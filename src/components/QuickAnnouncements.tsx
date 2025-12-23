@@ -17,121 +17,105 @@ interface Announcement {
 const announcements: Announcement[] = [
   {
     id: 1,
-    titleKey: '',
-    messageKey: '',
+    titleKey: 'quickAnnouncements.systemMaintenance',
+    messageKey: 'quickAnnouncements.maintenanceMsg',
     time: '2 hours ago',
     type: 'warning',
     icon: 'Warning',
-    title: 'System Maintenance',
-    message: 'Scheduled maintenance tonight from 11 PM to 2 AM',
-    iconUnicode: '\uE7BA', // 
+    // title and message removed to always use translation
   },
   {
     id: 2,
-    titleKey: '',
-    messageKey: '',
+    titleKey: 'quickAnnouncements.newPolicy',
+    messageKey: 'quickAnnouncements.policyMsg',
     time: '5 hours ago',
     type: 'info',
     icon: 'Info',
-    title: 'New Policy Update',
-    message: 'Updated remote work policy is now available',
-    iconUnicode: '\uE78B', // 
+    // title and message removed to always use translation
   },
   {
     id: 3,
-    titleKey: '',
-    messageKey: '',
+    titleKey: 'quickAnnouncements.holidaySchedule',
+    messageKey: 'quickAnnouncements.holidayMsg',
     time: '1 day ago',
     type: 'success',
     icon: 'Calendar',
-    title: 'Holiday Schedule',
-    message: 'Office will be closed on Friday for public holiday',
-    iconUnicode: '\uEA18', // 
+    // title and message removed to always use translation
   },
   {
     id: 4,
-    titleKey: '',
-    messageKey: '',
+    titleKey: 'quickAnnouncements.securityAlert',
+    messageKey: 'quickAnnouncements.securityMsg',
     time: '2 days ago',
     type: 'urgent',
     icon: 'Shield',
-    title: 'Security Alert',
-    message: 'Please update your password before end of month',
-    iconUnicode: '\uE72E', // 
+    // title and message removed to always use translation
   },
 ];
 
-const getStyles = (theme: any) => mergeStyleSets({
+const getStyles = () => mergeStyleSets({
   container: {
     //backgroundColor: theme.palette.white,
     //padding: '18px',
-   // borderRadius: '12px',
+    //borderRadius: '12px',
     //boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
     //border: `1px solid ${theme.palette.neutralQuaternaryAlt}`,
     height: '100%',
-
     margin: '10px',
   },
   scrollContainer: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(5, 1fr)',
-    gap: '20px',
-    width: '100%',
-    padding: '12px 0 12px 8px',
-    minHeight: 140,
-    overflow: 'hidden',
-    marginTop: '5px !important',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: '4px 0',
+    gap: '16px',
   },
   card: {
-    width: '100%',
-    minWidth: 0,
-    maxWidth: '100%',
-    padding: '18px 18px',
-    backgroundColor: theme.palette.white,
-    borderRadius: '10px',
-    boxShadow: '0 1.6px 3.6px rgba(0, 0, 0, 0.13)',
-    border: `1px solid ${theme.palette.neutralQuaternaryAlt}`,
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
+    minWidth: 320,
+    maxWidth: 340,
+    flex: '0 0 auto',
+    borderRadius: 12,
+    borderWidth: 2,
+    borderStyle: 'solid',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+    padding: 18,
+    background: '#fff',
+    transition: 'box-shadow 0.2s',
+    margin: '4px 0',
     display: 'flex',
     alignItems: 'center',
-    gap: 16,
-    ':hover': {
-      transform: 'translateY(-2px)',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-      borderColor: theme.palette.themePrimary,
-    },
   },
   iconContainer: {
-    width: '40px',
-    height: '40px',
-    borderRadius: '8px',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    flexShrink: 0,
+    marginRight: 16,
   },
 });
 
-const headerTokens: IStackTokens = { childrenGap: 4 };
-
-export default function QuickAnnouncements() {
-  const { t } = useTranslation();
-  const theme = useTheme();
-  const styles = getStyles(theme);
-
-  const getTypeColor = (type: string) => {
-    const colors = {
-      info: { bg: '#deecf9', icon: '#0078d4' },
-      warning: { bg: '#fff4ce', icon: '#ffaa44' },
-      success: { bg: '#dff6dd', icon: '#107c10' },
-      urgent: { bg: '#fde7e9', icon: '#d13438' },
-    };
-    return colors[type as keyof typeof colors] || colors.info;
+const getTypeColor = (type: string) => {
+  const colors = {
+    info: { bg: '#deecf9', icon: '#0078d4' },
+    warning: { bg: '#fff4ce', icon: '#ffaa44' },
+    success: { bg: '#dff6dd', icon: '#107c10' },
+    urgent: { bg: '#fde7e9', icon: '#d13438' },
   };
+  return colors[type as keyof typeof colors] || colors.info;
+};
 
-  // Ensure at least 5 cards are shown
-  const cardsToShow = 5;
+// Ensure at least 5 cards are shown
+
+const QuickAnnouncements = () => {
+  const theme = useTheme();
+  const { t } = useTranslation();
+  const styles = getStyles();
+  const headerTokens: IStackTokens = { childrenGap: 4 };
+
+  // Ensure at least 4 cards are shown
+  const cardsToShow = 4;
   const filledAnnouncements = [...announcements];
   while (filledAnnouncements.length < cardsToShow) {
     filledAnnouncements.push({
@@ -145,6 +129,12 @@ export default function QuickAnnouncements() {
       message: '',
       iconUnicode: '',
       // Add any other required fields
+    });
+  }
+  if (import.meta.env.DEV) {
+    filledAnnouncements.forEach((a) => {
+      console.debug('[QuickAnnouncements] t(titleKey)', a.titleKey, t(a.titleKey));
+      console.debug('[QuickAnnouncements] t(messageKey)', a.messageKey, t(a.messageKey));
     });
   }
 
@@ -178,7 +168,7 @@ export default function QuickAnnouncements() {
                 borderColor: colors.icon,
                 opacity: 1,
                 pointerEvents: isPlaceholder ? 'none' : 'auto',
-                borderStyle: isPlaceholder ? 'dashed' : 'solid',
+                borderStyle: isPlaceholder ? 'solid' : 'solid',
                 background: theme.palette.white,
                 display: 'flex',
                 alignItems: 'center',
@@ -196,16 +186,16 @@ export default function QuickAnnouncements() {
                     </span>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <Text variant="medium" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, marginBottom: 2 } }}>
-                      Network Infrastructure Upgrade
-                    </Text>
-                    <Text variant="small" styles={{ root: { color: theme.palette.neutralSecondary, fontSize: '13px', marginBottom: 2 } }}>
-                      Scheduled upgrade on Saturday from 1 AM to 5 AM. Expect brief connectivity interruptions.
-                    </Text>
-                    <Text variant="small" styles={{ root: { color: theme.palette.neutralTertiary, fontSize: '11px', marginTop: '4px' } }}>
-                      Today
-                    </Text>
-                  </div>
+                      <Text variant="medium" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, marginBottom: 2 } }}>
+                        {t('quickAnnouncements.placeholderTitle')}
+                      </Text>
+                      <Text variant="small" styles={{ root: { color: theme.palette.neutralSecondary, fontSize: '13px', marginBottom: 2 } }}>
+                        {t('quickAnnouncements.placeholderMsg')}
+                      </Text>
+                      <Text variant="small" styles={{ root: { color: theme.palette.neutralTertiary, fontSize: '11px', marginTop: '4px' } }}>
+                        {t('quickAnnouncements.placeholderTime')}
+                      </Text>
+                    </div>
                 </div>
               ) : (
                 <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
@@ -238,4 +228,6 @@ export default function QuickAnnouncements() {
       </div>
     </Stack>
   );
-}
+};
+
+export default QuickAnnouncements;

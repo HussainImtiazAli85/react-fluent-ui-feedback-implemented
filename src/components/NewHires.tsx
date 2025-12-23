@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { NewHire } from '../types/database';
-import { Stack, Text, Persona, PersonaSize, Icon, Link, useTheme, mergeStyleSets, IStackTokens } from '@fluentui/react';
+import { Stack, Text, Persona, PersonaSize, Icon, Link, useTheme, mergeStyleSets, IStackTokens, ITheme } from '@fluentui/react';
 
-const getStyles = (theme: any) => mergeStyleSets({
+const getStyles = (theme: ITheme) => mergeStyleSets({
   container: {
     backgroundColor: theme.palette.white,
     padding: '28px',

@@ -11,13 +11,16 @@ export interface QuickLink {
 export interface NewsAnnouncement {
   id: string;
   title: string;
+  title_ar?: string;
   content: string;
+  content_ar?: string;
   image_url: string;
   published_date: string;
   category: string;
   author: string;
   department: string;
   excerpt: string;
+  excerpt_ar?: string;
   created_at: string;
 }
 

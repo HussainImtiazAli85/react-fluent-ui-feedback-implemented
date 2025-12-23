@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { NewHire } from '../types/database';
-import { Stack, Text, Persona, PersonaSize, Icon, Spinner, SpinnerSize, useTheme, mergeStyleSets, IStackTokens } from '@fluentui/react';
+import { Stack, Text, Persona, PersonaSize, Icon, Spinner, SpinnerSize, useTheme, mergeStyleSets, IStackTokens, ITheme } from '@fluentui/react';
 
-const getStyles = (theme: any) => mergeStyleSets({
+const getStyles = (theme: ITheme) => mergeStyleSets({
   pageContainer: {
     maxWidth: '1280px',
     margin: '0 auto',
@@ -71,6 +71,7 @@ const dummyHires: NewHire[] = [
     position: 'Senior Product Designer',
     department: 'Product & Design',
     start_date: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+    photo_url: '',
     bio: 'Passionate about creating intuitive user experiences and design systems that scale.',
     created_at: new Date().toISOString(),
   },
@@ -80,6 +81,7 @@ const dummyHires: NewHire[] = [
     position: 'Full Stack Developer',
     department: 'Engineering',
     start_date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+    photo_url: '',
     bio: 'Experienced in building scalable web applications with modern frameworks and cloud technologies.',
     created_at: new Date().toISOString(),
   },
@@ -89,6 +91,7 @@ const dummyHires: NewHire[] = [
     position: 'Marketing Manager',
     department: 'Marketing & Communications',
     start_date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    photo_url: '',
     bio: 'Driving brand growth through data-driven strategies and creative storytelling.',
     created_at: new Date().toISOString(),
   },
@@ -98,6 +101,7 @@ const dummyHires: NewHire[] = [
     position: 'DevOps Engineer',
     department: 'Engineering',
     start_date: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString(),
+    photo_url: '',
     bio: 'Specializing in cloud infrastructure and continuous deployment pipelines.',
     created_at: new Date().toISOString(),
   },
@@ -107,6 +111,7 @@ const dummyHires: NewHire[] = [
     position: 'HR Business Partner',
     department: 'Human Resources',
     start_date: new Date(Date.now() - 40 * 24 * 60 * 60 * 1000).toISOString(),
+    photo_url: '',
     bio: 'Committed to building inclusive workplace cultures and supporting employee growth.',
     created_at: new Date().toISOString(),
   },
@@ -116,6 +121,7 @@ const dummyHires: NewHire[] = [
     position: 'Sales Executive',
     department: 'Sales',
     start_date: new Date(Date.now() - 55 * 24 * 60 * 60 * 1000).toISOString(),
+    photo_url: '',
     bio: 'Building strong client relationships and driving revenue growth.',
     created_at: new Date().toISOString(),
   },
@@ -125,6 +131,7 @@ const dummyHires: NewHire[] = [
     position: 'UX Researcher',
     department: 'Product & Design',
     start_date: new Date(Date.now() - 70 * 24 * 60 * 60 * 1000).toISOString(),
+    photo_url: '',
     bio: 'Uncovering user insights that drive product innovation.',
     created_at: new Date().toISOString(),
   },
@@ -134,6 +141,7 @@ const dummyHires: NewHire[] = [
     position: 'Financial Analyst',
     department: 'Finance',
     start_date: new Date(Date.now() - 85 * 24 * 60 * 60 * 1000).toISOString(),
+    photo_url: '',
     bio: 'Providing strategic financial insights for business growth.',
     created_at: new Date().toISOString(),
   },

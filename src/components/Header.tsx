@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { FormEvent, MouseEvent } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -9,6 +10,7 @@ import {
   IconButton,
   CommandBar,
   ICommandBarItemProps,
+  IButtonStyles,
   Panel,
   ChoiceGroup,
   IChoiceGroupOption,
@@ -53,7 +55,7 @@ export default function Header() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const getNavItemStyles = (isActive: boolean) => ({
+  const getNavItemStyles = (isActive: boolean): IButtonStyles => ({
     root: {
       backgroundColor: isActive ? fluentTheme.palette.themeLighter : 'transparent',
       borderBottom: isActive ? `3px solid ${fluentTheme.palette.themePrimary}` : '3px solid transparent',
@@ -155,13 +157,13 @@ export default function Header() {
     { key: 'ar', text: t('language.arabic') },
   ];
 
-  const handleThemeChange = (_: any, option?: IChoiceGroupOption) => {
+  const handleThemeChange = (_?: FormEvent<HTMLElement | HTMLInputElement>, option?: IChoiceGroupOption) => {
     if (option) {
       setTheme(option.key as ThemeType);
     }
   };
 
-  const handleLanguageChange = (_: any, option?: IChoiceGroupOption) => {
+  const handleLanguageChange = (_?: FormEvent<HTMLElement | HTMLInputElement>, option?: IChoiceGroupOption) => {
     if (option) {
       i18n.changeLanguage(option.key);
       localStorage.setItem('appLanguage', option.key);
@@ -325,9 +327,9 @@ export default function Header() {
             <a
               key={item.key}
               href={item.href}
-              onClick={(e) => {
+              onClick={(e: MouseEvent<HTMLAnchorElement>) => {
                 setIsMobileMenuOpen(false);
-                item.onClick?.(e as any);
+                item.onClick?.(e);
               }}
               className={mergeStyles({
                 padding: '12px 16px',

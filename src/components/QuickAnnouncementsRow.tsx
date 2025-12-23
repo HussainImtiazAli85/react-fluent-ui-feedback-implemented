@@ -1,8 +1,7 @@
 import QuickAnnouncements from './QuickAnnouncements';
-import { mergeStyles, useTheme } from '@fluentui/react';
+import { mergeStyles } from '@fluentui/react';
 
 export default function QuickAnnouncementsRow() {
-  const theme = useTheme();
   return (
     <div
       className={mergeStyles({

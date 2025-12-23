@@ -1,10 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Stack, Text, Icon, IconButton, useTheme, mergeStyleSets, IStackTokens, Breadcrumb, IBreadcrumbItem } from '@fluentui/react';
+import { Stack, Text, Icon, IconButton, useTheme, mergeStyleSets, IStackTokens, Breadcrumb, IBreadcrumbItem, ITheme } from '@fluentui/react';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
 import { NewsAnnouncement } from '../types/database';
 
-const getStyles = (theme: any) => mergeStyleSets({
+const getStyles = (theme: ITheme) => mergeStyleSets({
   pageRoot: {
     backgroundColor: '#f3f2f1',
     minHeight: 'calc(100vh - 128px)',
@@ -64,6 +65,7 @@ export default function AnnouncementDetail() {
   const navigate = useNavigate();
   const theme = useTheme();
   const styles = getStyles(theme);
+  const { t, i18n } = useTranslation();
   const [announcement, setAnnouncement] = useState<NewsAnnouncement | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -99,16 +101,6 @@ export default function AnnouncementDetail() {
     if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
     if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  };
-
-  const getIconName = (category: string) => {
-    const icons: Record<string, string> = {
-      warning: 'Warning',
-      urgent: 'Shield',
-      success: 'CheckMark',
-      info: 'Info',
-    };
-    return icons[category?.toLowerCase()] || 'Info';
   };
 
   if (loading) {
@@ -154,10 +146,59 @@ export default function AnnouncementDetail() {
 
   const colors = getTypeColor(announcement.category);
 
+  const isAr = i18n.language === 'ar';
+  const normalizeSeedKey = (value?: string | null) => (value || '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toLowerCase();
+
+  const seedEntries: Array<{ match: string; titleKey: string; contentKey: string; excerptKey: string }> = [
+    {
+      match: 'Welcome to Q4 2025',
+      titleKey: 'news.demo.welcomeQ4.title',
+      contentKey: 'news.demo.welcomeQ4.content',
+      excerptKey: 'news.demo.welcomeQ4.excerpt',
+    },
+    {
+      match: 'New Office Opening',
+      titleKey: 'news.demo.newOffice.title',
+      contentKey: 'news.demo.newOffice.content',
+      excerptKey: 'news.demo.newOffice.excerpt',
+    },
+    {
+      match: 'Employee Wellness Program',
+      titleKey: 'news.demo.wellness.title',
+      contentKey: 'news.demo.wellness.content',
+      excerptKey: 'news.demo.wellness.excerpt',
+    },
+  ];
+
+  const getSeedEntry = (title: string) => {
+    const normalizedTitle = normalizeSeedKey(title);
+    return seedEntries.find((e) => normalizeSeedKey(e.match) === normalizedTitle)
+      || seedEntries.find((e) => normalizedTitle.includes(normalizeSeedKey(e.match)));
+  };
+
+  const seeded = isAr && !announcement.title_ar && !announcement.content_ar && !announcement.excerpt_ar
+    ? getSeedEntry(announcement.title)
+    : null;
+
+  const title = seeded ? t(seeded.titleKey) : (isAr ? (announcement.title_ar || announcement.title) : announcement.title);
+  const excerpt = seeded ? t(seeded.excerptKey) : (isAr ? (announcement.excerpt_ar || announcement.excerpt) : announcement.excerpt);
+  const content = seeded ? t(seeded.contentKey) : (isAr ? (announcement.content_ar || announcement.content) : announcement.content);
+
+  if (import.meta.env.DEV && isAr) {
+    console.debug('[AnnouncementDetail] item localization', {
+      title: announcement.title,
+      title_ar: announcement.title_ar,
+      usedSeedFallback: Boolean(seeded),
+    });
+  }
+
   const breadcrumbItems: IBreadcrumbItem[] = [
     { text: 'Home', key: 'home', onClick: () => navigate('/') },
     { text: 'Announcements', key: 'announcements', onClick: () => navigate('/announcements') },
-    { text: announcement.title, key: 'current', isCurrentItem: true },
+    { text: title, key: 'current', isCurrentItem: true },
   ];
 
   return (
@@ -212,11 +253,11 @@ export default function AnnouncementDetail() {
               </Stack>
 
               <Text variant="xxLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary } }}>
-                {announcement.title}
+                {title}
               </Text>
 
               <Text variant="medium" styles={{ root: { color: theme.palette.neutralSecondary } }}>
-                {announcement.excerpt}
+                {excerpt}
               </Text>
 
               <Stack horizontal tokens={{ childrenGap: 16 }} wrap>
@@ -247,7 +288,7 @@ export default function AnnouncementDetail() {
             </Stack>
 
             <Text variant="medium" styles={{ root: { color: theme.palette.neutralPrimary, lineHeight: '1.8', whiteSpace: 'pre-line' } }}>
-              {announcement.content}
+              {content}
             </Text>
 
             <Stack

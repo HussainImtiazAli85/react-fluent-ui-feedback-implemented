@@ -1,8 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Stack, Text, Icon, IconButton, useTheme, mergeStyleSets, IStackTokens, Breadcrumb, IBreadcrumbItem, PrimaryButton, DefaultButton } from '@fluentui/react';
+import { Stack, Text, Icon, IconButton, useTheme, mergeStyleSets, IStackTokens, Breadcrumb, IBreadcrumbItem, PrimaryButton, DefaultButton, ITheme } from '@fluentui/react';
 import { supabase } from '../lib/supabase';
 import { Document } from '../types/database';
+
+const getFileTypeFromUrl = (url?: string | null) => {
+  const value = (url || '').trim();
+  const ext = value.includes('.') ? value.split('.').pop()!.toLowerCase() : '';
+  if (ext === 'pdf') return 'pdf';
+  if (ext === 'doc' || ext === 'docx') return 'word';
+  if (ext === 'xls' || ext === 'xlsx') return 'excel';
+  if (ext === 'ppt' || ext === 'pptx') return 'powerpoint';
+  if (ext === 'txt') return 'text';
+  return 'document';
+};
 
 const getDocIcon = (fileType: string) => {
   const iconMap: Record<string, string> = {
@@ -15,7 +26,7 @@ const getDocIcon = (fileType: string) => {
   return iconMap[fileType?.toLowerCase()] || 'Document';
 };
 
-const getStyles = (theme: any) => mergeStyleSets({
+const getStyles = (theme: ITheme) => mergeStyleSets({
   pageRoot: {
     backgroundColor: '#f3f2f1',
     minHeight: 'calc(100vh - 128px)',
@@ -125,12 +136,6 @@ export default function DocumentDetail() {
     return colorMap[fileType?.toLowerCase()] || theme.palette.themePrimary;
   };
 
-  const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-  };
-
   const getCategoryInfo = (category: string) => {
     const categoryMap: Record<string, { icon: string; color: string; bg: string }> = {
       policy: { icon: 'Shield', color: '#0078d4', bg: '#deecf9' },
@@ -142,7 +147,8 @@ export default function DocumentDetail() {
     return categoryMap[category?.toLowerCase()] || categoryMap.general;
   };
 
-  const fileColor = getFileTypeColor(document.file_type);
+  const fileType = getFileTypeFromUrl(document.file_url);
+  const fileColor = getFileTypeColor(fileType);
   const categoryInfo = getCategoryInfo(document.category || 'general');
 
   const breadcrumbItems: IBreadcrumbItem[] = [
@@ -177,7 +183,7 @@ export default function DocumentDetail() {
                   color: fileColor,
                 }}
               >
-                <Icon iconName={getDocIcon(document.file_type)} styles={{ root: { fontSize: 40 } }} />
+                <Icon iconName={getDocIcon(fileType)} styles={{ root: { fontSize: 40 } }} />
               </div>
 
               <Stack tokens={{ childrenGap: 12 }} styles={{ root: { flex: 1 } }}>
@@ -189,7 +195,7 @@ export default function DocumentDetail() {
                       color: fileColor,
                     }}
                   >
-                    {document.file_type || 'PDF'}
+                    {fileType === 'document' ? 'DOC' : fileType.toUpperCase()}
                   </div>
                   <div
                     className={styles.badge}
@@ -213,15 +219,9 @@ export default function DocumentDetail() {
 
                 <Stack horizontal tokens={{ childrenGap: 16 }} wrap>
                   <div className={styles.metaItem}>
-                    <Icon iconName="Page" styles={{ root: { fontSize: 14, color: theme.palette.themePrimary } }} />
-                    <Text variant="small" styles={{ root: { fontWeight: 500 } }}>
-                      {formatFileSize(document.file_size || 1024000)}
-                    </Text>
-                  </div>
-                  <div className={styles.metaItem}>
                     <Icon iconName="Calendar" styles={{ root: { fontSize: 14, color: theme.palette.themePrimary } }} />
                     <Text variant="small" styles={{ root: { fontWeight: 500 } }}>
-                      {new Date(document.created_at || '').toLocaleDateString()}
+                      {new Date(document.uploaded_at || document.created_at || '').toLocaleDateString()}
                     </Text>
                   </div>
                   <div className={styles.metaItem}>
@@ -283,7 +283,7 @@ export default function DocumentDetail() {
                     Document Type:
                   </Text>
                   <Text variant="medium" styles={{ root: { color: theme.palette.neutralPrimary } }}>
-                    {document.file_type?.toUpperCase() || 'PDF'}
+                    {fileType === 'document' ? 'DOC' : fileType.toUpperCase()}
                   </Text>
                 </Stack>
                 <Stack horizontal horizontalAlign="space-between">
@@ -299,7 +299,7 @@ export default function DocumentDetail() {
                     Last Modified:
                   </Text>
                   <Text variant="medium" styles={{ root: { color: theme.palette.neutralPrimary } }}>
-                    {new Date(document.updated_at || document.created_at || '').toLocaleDateString()}
+                    {new Date(document.uploaded_at || document.created_at || '').toLocaleDateString()}
                   </Text>
                 </Stack>
               </Stack>

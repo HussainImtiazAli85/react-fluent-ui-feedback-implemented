@@ -1,19 +1,6 @@
 import { Stack, Text, Icon, mergeStyles, useTheme } from '@fluentui/react';
 import { useTranslation } from 'react-i18next';
 
-const cardStyles = mergeStyles({
-  padding: '24px',
-  backgroundColor: '#fff',
-  borderRadius: '8px',
-  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-  border: '1px solid #edebe9',
-  transition: 'all 0.2s ease',
-  ':hover': {
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)',
-    transform: 'translateY(-2px)',
-  },
-});
-
 const statCardStyles = (gradient: string) => mergeStyles({
   padding: '20px',
   borderRadius: '8px',
@@ -83,33 +70,35 @@ const stats: Stat[] = [
 ];
 
 export default function DashboardOverview() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
+
+  const dashboardTitle = t('dashboardOverview.title');
+  if (import.meta.env.DEV) {
+    console.debug('[DashboardOverview] lang:', i18n.language, 'dashboardOverview.title:', dashboardTitle);
+  }
+
+  const toTranslationKey = (label: string) => {
+    const words = label.split(' ').filter(Boolean);
+    if (words.length === 0) return '';
+    return words
+      .map((word, index) => {
+        const lower = word.toLowerCase();
+        if (index === 0) return lower;
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      })
+      .join('');
+  };
 
   return (
     <Stack tokens={{ childrenGap: 24 }}>
       <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
         <Stack tokens={{ childrenGap: 8 }}>
           <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, fontSize: '24px' } }}>
-            {t('dashboardOverview.title')}
+            {dashboardTitle === 'dashboardOverview.title' ? 'Dashboard Overview' : dashboardTitle}
           </Text>
         </Stack>
-        <a
-          href="#"
-          className='view-all-detail'
-          style={{
-            color: theme.palette.themePrimary,
-            textDecoration: 'none',
-            fontWeight: 600,
-            fontSize: '14px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-          }}
-        >
-          {t('dashboardOverview.viewDetails')} <Icon iconName="ChevronRight" styles={{ root: { fontSize: '12px' } }} />
-        </a>
-      </Stack>
+        </Stack>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
         {stats.map((stat, index) => (
@@ -131,7 +120,7 @@ export default function DashboardOverview() {
                 {stat.value}
               </Text>
               <Text variant="medium" styles={{ root: { color: 'rgba(255, 255, 255, 0.9)' } }}>
-                {t(`dashboardOverview.${stat.title.toLowerCase().replace(/\s+/g, '')}`)}
+                {t(`dashboardOverview.${toTranslationKey(stat.title)}`)}
               </Text>
             </Stack>
           </div>

@@ -1,7 +1,6 @@
-import { Stack, mergeStyles, mergeStyleSets, useTheme, IStackTokens } from '@fluentui/react';
+import { mergeStyles, mergeStyleSets } from '@fluentui/react';
 import BannerSlider from '../components/BannerSlider';
 import QuickLinks from '../components/QuickLinks';
-import QuickAnnouncements from '../components/QuickAnnouncements';
 import DashboardOverview from '../components/DashboardOverview';
 import NewsAnnouncements from '../components/NewsAnnouncements';
 import Events from '../components/Events';
@@ -51,13 +50,7 @@ const gridStyles = mergeStyles({
   },
 });
 
-const containerTokens: IStackTokens = {
-  childrenGap: 32,
-};
-
 export default function Home() {
-  const theme = useTheme();
-
   return (
     <div className={pageStyles.root}>
       <BannerSlider />

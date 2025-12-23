@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Event } from '../types/database';
-import { Stack, Text, Icon, Spinner, SpinnerSize, useTheme, mergeStyleSets, IStackTokens } from '@fluentui/react';
+import { Stack, Text, Icon, Spinner, SpinnerSize, useTheme, mergeStyleSets, IStackTokens, ITheme } from '@fluentui/react';
 
-const getStyles = (theme: any) => mergeStyleSets({
+const getStyles = (theme: ITheme) => mergeStyleSets({
   pageContainer: {
     maxWidth: '1280px',
     margin: '0 auto',

@@ -54,12 +54,6 @@ const iconContainerStyles = mergeStyles({
   },
 });
 
-const sliderContainerStyles = mergeStyles({
-  position: 'relative',
-  overflow: 'hidden',
-  padding: '0 0',
-});
-
 const sliderStyles = mergeStyles({
   display: 'flex',
   gap: '21px',
@@ -73,7 +67,8 @@ const sliderStyles = mergeStyles({
 
 export default function QuickLinks() {
   const { t } = useTranslation();
-  const [links, setLinks] = useState<QuickLink[]>([]);
+  type LocalQuickLink = QuickLink & { titleKey?: string; descriptionKey?: string };
+  const [links, setLinks] = useState<LocalQuickLink[]>([]);
   const [loading, setLoading] = useState(true);
   const sliderRef = useRef<HTMLDivElement>(null);
 
@@ -91,15 +86,15 @@ export default function QuickLinks() {
       if (error) throw error;
 
       const moreLinks = [
-        { id: 100, titleKey: 'quickLinks.employeeBenefits', descriptionKey: 'quickLinks.employeeBenefitsDesc', icon: 'Heart', url: '#', order_index: 100 },
-        { id: 101, titleKey: 'quickLinks.timeOff', descriptionKey: 'quickLinks.timeOffDesc', icon: 'Calendar', url: '#', order_index: 101 },
-        { id: 102, titleKey: 'quickLinks.payroll', descriptionKey: 'quickLinks.payrollDesc', icon: 'Money', url: '#', order_index: 102 },
-        { id: 103, titleKey: 'quickLinks.performance', descriptionKey: 'quickLinks.performanceDesc', icon: 'Chart', url: '#', order_index: 103 },
-        { id: 104, titleKey: 'quickLinks.learningResources', descriptionKey: 'quickLinks.learningResourcesDesc', icon: 'Education', url: '#', order_index: 104 },
-        { id: 105, titleKey: 'quickLinks.itSupport', descriptionKey: 'quickLinks.itSupportDesc', icon: 'Settings', url: '#', order_index: 105 },
+        { id: 'local-100', title: '', description: '', titleKey: 'quickLinks.employeeBenefits', descriptionKey: 'quickLinks.employeeBenefitsDesc', icon: 'Heart', url: '#', order_index: 100, created_at: new Date().toISOString() },
+        { id: 'local-101', title: '', description: '', titleKey: 'quickLinks.timeOff', descriptionKey: 'quickLinks.timeOffDesc', icon: 'Calendar', url: '#', order_index: 101, created_at: new Date().toISOString() },
+        { id: 'local-102', title: '', description: '', titleKey: 'quickLinks.payroll', descriptionKey: 'quickLinks.payrollDesc', icon: 'Money', url: '#', order_index: 102, created_at: new Date().toISOString() },
+        { id: 'local-103', title: '', description: '', titleKey: 'quickLinks.performance', descriptionKey: 'quickLinks.performanceDesc', icon: 'Chart', url: '#', order_index: 103, created_at: new Date().toISOString() },
+        { id: 'local-104', title: '', description: '', titleKey: 'quickLinks.learningResources', descriptionKey: 'quickLinks.learningResourcesDesc', icon: 'Education', url: '#', order_index: 104, created_at: new Date().toISOString() },
+        { id: 'local-105', title: '', description: '', titleKey: 'quickLinks.itSupport', descriptionKey: 'quickLinks.itSupportDesc', icon: 'Settings', url: '#', order_index: 105, created_at: new Date().toISOString() },
       ];
 
-      setLinks([...(data || []), ...moreLinks as any]);
+      setLinks([...(data || []), ...moreLinks]);
     } catch (error) {
       console.error('Error fetching quick links:', error);
     } finally {
@@ -175,8 +170,7 @@ export default function QuickLinks() {
             />
             <div ref={sliderRef} className={sliderStyles} style={{ flex: 1, margin: '0 40px' }}>
               {links.map((link) => {
-                const label = (link as any).titleKey ? t((link as any).titleKey) : link.title;
-                const desc = (link as any).descriptionKey ? t((link as any).descriptionKey) : link.description;
+                const label = link.titleKey ? t(link.titleKey) : link.title;
                 return (
                   <a
                     key={link.id}

@@ -45,7 +45,22 @@ export default function DepartmentDetail() {
   const { deptId } = useParams<{ deptId: string }>();
   const theme = useTheme();
 
-  const departmentData: Record<string, any> = {
+  type TeamMember = { name: string; role: string; email: string };
+  type DepartmentInfo = {
+    name: string;
+    description: string;
+    head: string;
+    email: string;
+    phone: string;
+    location: string;
+    teamSize: number;
+    established: string;
+    mission: string;
+    services: string[];
+    teamMembers: TeamMember[];
+  };
+
+  const departmentData: Record<string, DepartmentInfo> = {
     dept1: {
       name: 'Department 1',
       description: 'Responsible for managing and developing innovative solutions for our clients.',
@@ -94,7 +109,7 @@ export default function DepartmentDetail() {
     },
   };
 
-  const dept = departmentData[deptId || ''] || departmentData.dept1;
+  const dept: DepartmentInfo = departmentData[deptId || ''] || departmentData.dept1;
 
   return (
     <section className={sectionStyles}>
@@ -247,7 +262,7 @@ export default function DepartmentDetail() {
                 </Text>
               </Stack>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-                {dept.teamMembers.map((member: any, index: number) => (
+                {dept.teamMembers.map((member, index: number) => (
                   <div key={index} className={teamMemberStyles}>
                     <div style={{
                       width: '48px',

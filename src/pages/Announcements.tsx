@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { Stack, Text, Icon, useTheme, mergeStyleSets, IStackTokens, SearchBox } from '@fluentui/react';
+import { Stack, Text, Icon, useTheme, mergeStyleSets, IStackTokens, SearchBox, ITheme } from '@fluentui/react';
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { NewsAnnouncement } from '../types/database';
 
-const getStyles = (theme: any) => mergeStyleSets({
+const getStyles = (theme: ITheme) => mergeStyleSets({
   pageRoot: {
     backgroundColor: '#f3f2f1',
     minHeight: 'calc(100vh - 128px)',
@@ -70,6 +71,7 @@ export default function Announcements() {
   const theme = useTheme();
   const styles = getStyles(theme);
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [announcements, setAnnouncements] = useState<NewsAnnouncement[]>([]);
   const [loading, setLoading] = useState(true);
@@ -94,11 +96,59 @@ export default function Announcements() {
     }
   };
 
-  const filteredAnnouncements = announcements.filter(announcement =>
-    announcement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    announcement.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    announcement.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const isAr = i18n.language === 'ar';
+  const normalizeSeedKey = (value?: string | null) => (value || '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toLowerCase();
+
+  const seedEntries: Array<{ match: string; titleKey: string; contentKey: string; excerptKey: string }> = [
+    {
+      match: 'Welcome to Q4 2025',
+      titleKey: 'news.demo.welcomeQ4.title',
+      contentKey: 'news.demo.welcomeQ4.content',
+      excerptKey: 'news.demo.welcomeQ4.excerpt',
+    },
+    {
+      match: 'New Office Opening',
+      titleKey: 'news.demo.newOffice.title',
+      contentKey: 'news.demo.newOffice.content',
+      excerptKey: 'news.demo.newOffice.excerpt',
+    },
+    {
+      match: 'Employee Wellness Program',
+      titleKey: 'news.demo.wellness.title',
+      contentKey: 'news.demo.wellness.content',
+      excerptKey: 'news.demo.wellness.excerpt',
+    },
+  ];
+
+  const getSeedEntry = (title: string) => {
+    const normalizedTitle = normalizeSeedKey(title);
+    return seedEntries.find((e) => normalizeSeedKey(e.match) === normalizedTitle)
+      || seedEntries.find((e) => normalizedTitle.includes(normalizeSeedKey(e.match)));
+  };
+
+  const getLocalizedAnnouncementFields = (announcement: NewsAnnouncement) => {
+    const shouldUseSeedFallback = isAr && !announcement.title_ar && !announcement.content_ar && !announcement.excerpt_ar;
+    const seeded = shouldUseSeedFallback ? getSeedEntry(announcement.title) : null;
+
+    const title = seeded ? t(seeded.titleKey) : (isAr ? (announcement.title_ar || announcement.title) : announcement.title);
+    const content = seeded ? t(seeded.contentKey) : (isAr ? (announcement.content_ar || announcement.content) : announcement.content);
+    const excerpt = seeded ? t(seeded.excerptKey) : (isAr ? (announcement.excerpt_ar || announcement.excerpt) : announcement.excerpt);
+
+    return { title, content, excerpt, usedSeedFallback: Boolean(seeded) };
+  };
+
+  const filteredAnnouncements = announcements.filter((announcement) => {
+    const { title, content, excerpt } = getLocalizedAnnouncementFields(announcement);
+    const q = searchQuery.toLowerCase();
+    return (
+      title.toLowerCase().includes(q) ||
+      content.toLowerCase().includes(q) ||
+      excerpt.toLowerCase().includes(q)
+    );
+  });
 
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
@@ -176,6 +226,16 @@ export default function Announcements() {
         <Stack tokens={listTokens}>
           {filteredAnnouncements.map((announcement) => {
             const colors = getTypeColor(announcement.category);
+            const { title, excerpt, usedSeedFallback } = getLocalizedAnnouncementFields(announcement);
+
+            if (import.meta.env.DEV && isAr) {
+              console.debug('[Announcements] item localization', {
+                title: announcement.title,
+                title_ar: announcement.title_ar,
+                usedSeedFallback,
+              });
+            }
+
             return (
               <div
                 key={announcement.id}
@@ -213,11 +273,11 @@ export default function Announcements() {
                     </Stack>
 
                     <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary } }}>
-                      {announcement.title}
+                      {title}
                     </Text>
 
                     <Text variant="medium" styles={{ root: { color: theme.palette.neutralPrimary, lineHeight: '1.6' } }}>
-                      {announcement.excerpt}
+                      {excerpt}
                     </Text>
                   </Stack>
 

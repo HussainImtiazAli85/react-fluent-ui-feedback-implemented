@@ -5,7 +5,6 @@ import {
   Text,
   Icon,
   mergeStyles,
-  useTheme,
 } from '@fluentui/react';
 
 const footerStyles = mergeStyles({
@@ -43,7 +42,6 @@ const logoStyles = mergeStyles({
 
 export default function Footer() {
   const { t } = useTranslation();
-  const theme = useTheme();
 
   return (
     <footer className={footerStyles}>

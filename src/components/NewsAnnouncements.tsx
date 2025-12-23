@@ -17,7 +17,7 @@ const containerStyles = mergeStyles({
 
 const cardStyles = mergeStyles({
   position: 'relative',
-  padding: '0',
+  padding: 0,
   backgroundColor: '#fff',
   borderRadius: '12px',
   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
@@ -41,19 +41,6 @@ const imageStyles = mergeStyles({
   overflow: 'hidden',
 });
 
-const imagePlaceholderStyles = mergeStyles({
-  width: '100%',
-  height: '200px',
-  background: 'linear-gradient(135deg, #0078d4 0%, #106ebe 100%)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: '#fff',
-  fontSize: '48px',
-  position: 'relative',
-  overflow: 'hidden',
-});
-
 const badgeStyles = mergeStyles({
   position: 'absolute',
   top: '16px',
@@ -73,9 +60,50 @@ const badgeStyles = mergeStyles({
 export default function NewsAnnouncements() {
   const [news, setNews] = useState<NewsAnnouncement[]>([]);
   const [loading, setLoading] = useState(true);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
   const navigate = useNavigate();
+
+  const normalizeSeedKey = (value?: string | null) => (value || '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toLowerCase();
+
+  const getLocalizedFromSeed = (item: NewsAnnouncement) => {
+    // Fallback for demo/seed data that exists only in English in the DB.
+    // Best long-term fix is storing Arabic in `title_ar/content_ar/excerpt_ar`.
+    const seedEntries: Array<{ match: string; titleKey: string; contentKey: string; excerptKey: string }> = [
+      {
+        match: 'Welcome to Q4 2025',
+        titleKey: 'news.demo.welcomeQ4.title',
+        contentKey: 'news.demo.welcomeQ4.content',
+        excerptKey: 'news.demo.welcomeQ4.excerpt',
+      },
+      {
+        match: 'New Office Opening',
+        titleKey: 'news.demo.newOffice.title',
+        contentKey: 'news.demo.newOffice.content',
+        excerptKey: 'news.demo.newOffice.excerpt',
+      },
+      {
+        match: 'Employee Wellness Program',
+        titleKey: 'news.demo.wellness.title',
+        contentKey: 'news.demo.wellness.content',
+        excerptKey: 'news.demo.wellness.excerpt',
+      },
+    ];
+
+    const normalizedTitle = normalizeSeedKey(item.title);
+    const entry = seedEntries.find((e) => normalizeSeedKey(e.match) === normalizedTitle)
+      || seedEntries.find((e) => normalizedTitle.includes(normalizeSeedKey(e.match)));
+    if (!entry) return null;
+
+    return {
+      title: t(entry.titleKey),
+      content: t(entry.contentKey),
+      excerpt: t(entry.excerptKey),
+    };
+  };
 
   useEffect(() => {
     fetchNews();
@@ -100,7 +128,18 @@ export default function NewsAnnouncements() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const locale = i18n.language === 'ar' ? 'ar' : 'en-US';
+    return date.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  const getCategoryLabel = (category?: string | null) => {
+    const key = (category || 'announcement').toLowerCase();
+    const candidateKey = `news.categories.${key}`;
+    const translated = t(candidateKey);
+    if (translated !== candidateKey) return translated;
+
+    const fallback = category || 'announcement';
+    return fallback.charAt(0).toUpperCase() + fallback.slice(1);
   };
 
   const getCategoryColor = (category: string) => {
@@ -134,7 +173,7 @@ export default function NewsAnnouncements() {
                 {t('news.title')}
               </Text>
               <Text variant="large" styles={{ root: { color: theme.palette.neutralSecondary } }}>
-                Stay updated with the latest company news and announcements
+                {t('news.subtitle')}
               </Text>
             </Stack>
             <a
@@ -167,6 +206,27 @@ export default function NewsAnnouncements() {
             scrollbarColor: '#0078d4 #f3f2f1',
           }}>
             {news.slice(0, 2).map((item, index) => (
+              (() => {
+                const isAr = i18n.language === 'ar';
+                const seeded = isAr && !item.title_ar && !item.content_ar && !item.excerpt_ar
+                  ? getLocalizedFromSeed(item)
+                  : null;
+                const title = seeded?.title || (isAr ? (item.title_ar || item.title) : item.title);
+                const contentSource = seeded?.excerpt || (isAr
+                  ? (item.excerpt_ar || item.excerpt || item.content_ar || item.content)
+                  : (item.excerpt || item.content));
+                const preview = contentSource.length > 150 ? `${contentSource.substring(0, 150)}...` : contentSource;
+
+                if (import.meta.env.DEV && isAr) {
+                  // Helps debug why Arabic isn't showing (DB fields vs seed fallback).
+                  console.debug('[NewsAnnouncements] item localization', {
+                    title: item.title,
+                    title_ar: item.title_ar,
+                    usedSeedFallback: Boolean(seeded),
+                  });
+                }
+
+                return (
               <div
                 key={item.id}
                 className={cardStyles}
@@ -175,12 +235,12 @@ export default function NewsAnnouncements() {
                 <div style={{ position: 'relative' }}>
                   <img
                     src={getNewsImage(index)}
-                    alt={item.title}
+                    alt={title}
                     className={imageStyles}
                   />
                   <div className={badgeStyles} style={{ color: getCategoryColor(item.category) }}>
                     <Icon iconName="Tag" styles={{ root: { fontSize: 12 } }} />
-                    {item.category?.charAt(0).toUpperCase() + item.category?.slice(1) || 'Announcement'}
+                    {getCategoryLabel(item.category)}
                   </div>
                 </div>
 
@@ -194,7 +254,7 @@ export default function NewsAnnouncements() {
                     </Stack>
 
                     <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, lineHeight: 1.3, wordWrap: 'break-word' } }}>
-                      {item.title}
+                      {title}
                     </Text>
 
                     <Text
@@ -212,23 +272,25 @@ export default function NewsAnnouncements() {
                         }
                       }}
                     >
-                      {item.content.substring(0, 150)}...
+                      {preview}
                     </Text>
                   </Stack>
 
                   <Stack horizontal horizontalAlign="space-between" verticalAlign="center" styles={{ root: { marginTop: 'auto' } }}>
                     <Text variant="small" styles={{ root: { color: theme.palette.themePrimary, fontWeight: 600 } }}>
-                      Read More →
+                      {t('news.readMore')} {i18n.language === 'ar' ? '←' : '→'}
                     </Text>
                     <Stack horizontal tokens={{ childrenGap: 8 }} verticalAlign="center">
                       <Icon iconName="View" styles={{ root: { fontSize: 14, color: theme.palette.neutralTertiary } }} />
                       <Text variant="tiny" styles={{ root: { color: theme.palette.neutralTertiary } }}>
-                        {Math.floor(Math.random() * 500) + 100} views
+                        {Math.floor(Math.random() * 500) + 100} {t('news.views')}
                       </Text>
                     </Stack>
                   </Stack>
                 </Stack>
               </div>
+                );
+              })()
             ))}
           </div>
         </Stack>

@@ -1,4 +1,4 @@
-import { Stack, Text, useTheme } from '@fluentui/react';
+import { Text, useTheme } from '@fluentui/react';
 
 export default function Departments() {
   const theme = useTheme();

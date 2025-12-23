@@ -1,4 +1,4 @@
-import { Stack, Text, Icon, mergeStyles, useTheme } from '@fluentui/react';
+import { Stack, Text, mergeStyles, useTheme } from '@fluentui/react';
 import { useTranslation } from 'react-i18next';
 
 const cardStyles = mergeStyles({

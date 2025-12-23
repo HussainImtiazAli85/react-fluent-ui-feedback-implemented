@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Stack, Text, Icon, IconButton, useTheme, mergeStyleSets, IStackTokens, Breadcrumb, IBreadcrumbItem, PrimaryButton, DefaultButton } from '@fluentui/react';
+import { Stack, Text, Icon, IconButton, useTheme, mergeStyleSets, IStackTokens, Breadcrumb, IBreadcrumbItem, PrimaryButton, DefaultButton, ITheme } from '@fluentui/react';
 import { supabase } from '../lib/supabase';
 import { Event } from '../types/database';
 
-const getStyles = (theme: any) => mergeStyleSets({
+const getStyles = (theme: ITheme) => mergeStyleSets({
   pageRoot: {
     backgroundColor: '#f3f2f1',
     minHeight: 'calc(100vh - 128px)',
@@ -137,7 +137,7 @@ export default function EventDetail() {
     };
   };
 
-  const dateInfo = formatEventDate(event.date);
+  const dateInfo = formatEventDate(event.event_date);
 
   const breadcrumbItems: IBreadcrumbItem[] = [
     { text: 'Home', key: 'home', onClick: () => navigate('/') },
