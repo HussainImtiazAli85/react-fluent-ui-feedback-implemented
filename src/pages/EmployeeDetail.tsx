@@ -161,7 +161,7 @@ export default function EmployeeDetail() {
                 color: theme.palette.themePrimary,
               }}
             >
-              <Icon iconName="Sparkle" styles={{ root: { fontSize: 14 } }} />
+              <Icon iconName="FavoriteStar" styles={{ root: { fontSize: 14 } }} />
               Joined {new Date(employee.start_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
             </div>
 

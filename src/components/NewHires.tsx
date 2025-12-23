@@ -191,7 +191,7 @@ export default function NewHires() {
                   }}
                 />
                 <div className={styles.badge}>
-                  <Icon iconName="Sparkle" styles={{ root: { color: '#ffd700', fontSize: 12 } }} />
+                  <Icon iconName="FavoriteStar" styles={{ root: { color: '#ffd700', fontSize: 12 } }} />
                 </div>
               </div>
 

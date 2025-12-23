@@ -253,7 +253,7 @@ export default function Team() {
                   />
                   <div className={styles.badge}>
                     <Icon
-                      iconName="Sparkle"
+                      iconName="FavoriteStar"
                       styles={{ root: { color: '#ffd700', fontSize: 14 } }}
                     />
                   </div>

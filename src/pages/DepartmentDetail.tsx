@@ -214,7 +214,7 @@ export default function DepartmentDetail() {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                  <Icon iconName="TaskList" styles={{ root: { fontSize: 24, color: '#fff' } }} />
+                  <Icon iconName="BulletedList" styles={{ root: { fontSize: 24, color: '#fff' } }} />
                 </div>
                 <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary } }}>
                   Services & Capabilities
