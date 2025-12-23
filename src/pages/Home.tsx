@@ -58,7 +58,7 @@ export default function Home() {
 
       {/* Quick Announcements full-width row */}
       <div style={{ background: "#fff", margin: '30px 0 0 0', padding: '10px' }}>
-        <div className={pageStyles.container}>
+        <div>
           <QuickAnnouncementsRow />
         </div>
       </div>

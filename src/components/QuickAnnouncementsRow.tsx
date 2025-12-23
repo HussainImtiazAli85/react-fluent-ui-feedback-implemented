@@ -14,7 +14,7 @@ export default function QuickAnnouncementsRow() {
         padding: '0',
         display: 'flex',
         alignItems: 'center',
-        minHeight: 120,
+        minHeight: 80,
       })}
     >
       <div style={{ flex: 1, width: '100%' }}>

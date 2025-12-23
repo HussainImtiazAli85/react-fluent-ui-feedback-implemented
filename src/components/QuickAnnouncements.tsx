@@ -53,7 +53,7 @@ const announcements: Announcement[] = [
   },
 ];
 
-const getStyles = () => mergeStyleSets({
+const getStyles = (theme: any) => mergeStyleSets({
   container: {
     //backgroundColor: theme.palette.white,
     //padding: '18px',
@@ -61,24 +61,29 @@ const getStyles = () => mergeStyleSets({
     //boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
     //border: `1px solid ${theme.palette.neutralQuaternaryAlt}`,
     height: '100%',
-    margin: '10px',
+    margin: 0,
+    width: '100%',
   },
   scrollContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+    gap: '12px',
+    width: '100%',
+    marginTop: '0 !important',
     padding: '4px 0',
-    gap: '16px',
+    '@media (max-width: 968px)': {
+      gridTemplateColumns: '1fr',
+    },
   },
   card: {
-    minWidth: 320,
-    maxWidth: 340,
-    flex: '0 0 auto',
+    width: '100%',
+    minWidth: 0,
+    boxSizing: 'border-box',
     borderRadius: 12,
     borderWidth: 2,
     borderStyle: 'solid',
     boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-    padding: 18,
+    padding: 12,
     background: '#fff',
     transition: 'box-shadow 0.2s',
     margin: '4px 0',
@@ -86,9 +91,9 @@ const getStyles = () => mergeStyleSets({
     alignItems: 'center',
   },
   iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -111,12 +116,12 @@ const getTypeColor = (type: string) => {
 const QuickAnnouncements = () => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const styles = getStyles();
+  const styles = getStyles(theme);
   const headerTokens: IStackTokens = { childrenGap: 4 };
 
-  // Ensure at least 4 cards are shown
-  const cardsToShow = 4;
-  const filledAnnouncements = [...announcements];
+  // Show 3 cards on desktop
+  const cardsToShow = 3;
+  const filledAnnouncements = [...announcements.slice(0, cardsToShow)];
   while (filledAnnouncements.length < cardsToShow) {
     filledAnnouncements.push({
       id: 1000 + filledAnnouncements.length,
@@ -131,35 +136,36 @@ const QuickAnnouncements = () => {
       // Add any other required fields
     });
   }
-  if (import.meta.env.DEV) {
-    filledAnnouncements.forEach((a) => {
-      console.debug('[QuickAnnouncements] t(titleKey)', a.titleKey, t(a.titleKey));
-      console.debug('[QuickAnnouncements] t(messageKey)', a.messageKey, t(a.messageKey));
-    });
-  }
 
   return (
     <Stack tokens={{ childrenGap: 20 }} className={styles.container}>
       <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
         <Stack tokens={headerTokens}>
-          <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, fontSize: '24px' } }}>
+          {/* <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, fontSize: '24px' } }}>
             {t('quickAnnouncements.title')}
-          </Text>
+          </Text> */}
           {/* <Text variant="small" styles={{ root: { color: theme.palette.neutralSecondary } }}>
             {t('quickAnnouncements.subtitle')}
           </Text> */}
         </Stack>
-        <Link to="/announcements" style={{ textDecoration: 'none' }} className="view-all-link">
+        {/* <Link to="/announcements" style={{ textDecoration: 'none' }} className="view-all-link">
           <FluentLink styles={{ root: { fontSize: '13px', fontWeight: 600 } }}>
             {t('quickAnnouncements.viewAll')} <Icon iconName="ChevronRight" styles={{ root: { fontSize: 10, marginLeft: '2px' } }} />
           </FluentLink>
-        </Link>
+        </Link> */}
       </Stack>
 
       <div className={styles.scrollContainer}>
         {filledAnnouncements.map((announcement) => {
           const colors = getTypeColor(announcement.type);
-          const isPlaceholder = !announcement.title && !announcement.message;
+          const isPlaceholder = !announcement.titleKey && !announcement.messageKey;
+
+          const placeholderLine = `${t('quickAnnouncements.placeholderMsg')} • ${t('quickAnnouncements.placeholderTime')}`;
+          const liveTitle = announcement.title || t(announcement.titleKey || '');
+          const liveMessage = announcement.message || t(announcement.messageKey || '');
+          const liveTime = announcement.time ? ` • ${announcement.time}` : '';
+          const liveLine = `${liveMessage}${liveTime}`;
+
           return (
             <div
               key={announcement.id}
@@ -172,7 +178,6 @@ const QuickAnnouncements = () => {
                 background: theme.palette.white,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
               }}
             >
               {isPlaceholder ? (
@@ -185,17 +190,37 @@ const QuickAnnouncements = () => {
                       <Icon iconName="Info" styles={{ root: { fontSize: 18, color: colors.icon } }} />
                     </span>
                   </div>
-                  <div style={{ flex: 1 }}>
-                      <Text variant="medium" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, marginBottom: 2 } }}>
-                        {t('quickAnnouncements.placeholderTitle')}
-                      </Text>
-                      <Text variant="small" styles={{ root: { color: theme.palette.neutralSecondary, fontSize: '13px', marginBottom: 2 } }}>
-                        {t('quickAnnouncements.placeholderMsg')}
-                      </Text>
-                      <Text variant="small" styles={{ root: { color: theme.palette.neutralTertiary, fontSize: '11px', marginTop: '4px' } }}>
-                        {t('quickAnnouncements.placeholderTime')}
-                      </Text>
-                    </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <Text
+                      variant="medium"
+                      styles={{
+                        root: {
+                          fontWeight: 600,
+                          color: theme.palette.neutralPrimary,
+                          marginBottom: 2,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        },
+                      }}
+                    >
+                      {t('quickAnnouncements.placeholderTitle')}
+                    </Text>
+                    <Text
+                      variant="small"
+                      styles={{
+                        root: {
+                          color: theme.palette.neutralSecondary,
+                          fontSize: '13px',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        },
+                      }}
+                    >
+                      {placeholderLine}
+                    </Text>
+                  </div>
                 </div>
               ) : (
                 <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
@@ -209,15 +234,35 @@ const QuickAnnouncements = () => {
                         : <Icon iconName={announcement.icon} styles={{ root: { fontSize: 18, color: colors.icon } }} />}
                     </span>
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <Text variant="medium" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, marginBottom: 2 } }}>
-                      {announcement.title || t(announcement.titleKey || '')}
+                  <div style={{ flex: 1, minWidth: 0, gap: 8, display: 'flex' }}>
+                    <Text
+                      variant="medium"
+                      styles={{
+                        root: {
+                          fontWeight: 600,
+                          color: theme.palette.neutralPrimary,
+                          marginBottom: 2,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        },
+                      }}
+                    >
+                      {liveTitle}
                     </Text>
-                    <Text variant="small" styles={{ root: { color: theme.palette.neutralSecondary, fontSize: '13px', marginBottom: 2 } }}>
-                      {announcement.message || t(announcement.messageKey || '')}
-                    </Text>
-                    <Text variant="small" styles={{ root: { color: theme.palette.neutralTertiary, fontSize: '11px', marginTop: '4px' } }}>
-                      {announcement.time}
+                    <Text
+                      variant="small"
+                      styles={{
+                        root: {
+                          color: theme.palette.neutralSecondary,
+                          fontSize: '13px',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        },
+                      }}
+                    >
+                      {liveLine}
                     </Text>
                   </div>
                 </div>
