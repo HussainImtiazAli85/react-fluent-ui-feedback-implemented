@@ -8,6 +8,7 @@ import Events from '../components/Events';
 import NewHires from '../components/NewHires';
 import CEOMessage from '../components/CEOMessage';
 import Documents from '../components/Documents';
+import QuickAnnouncementsRow from '../components/QuickAnnouncementsRow';
 
 const pageStyles = mergeStyleSets({
   root: {
@@ -25,7 +26,7 @@ const pageStyles = mergeStyleSets({
   },
   sectionGray: {
     backgroundColor: '#f3f2f1',
-    padding: '48px 0',
+    padding: '30px 0',
   },
   sectionWhite: {
     backgroundColor: '#fff',
@@ -62,16 +63,22 @@ export default function Home() {
       <BannerSlider />
       <QuickLinks />
 
-      <div className={pageStyles.sectionGray}>
+      {/* Quick Announcements full-width row */}
+      <div style={{ background: "#fff", margin: '30px 0 0 0', padding: '10px' }}>
         <div className={pageStyles.container}>
-          <div className={gridStyles}>
-            <QuickAnnouncements />
-            <Documents />
-          </div>
+          <QuickAnnouncementsRow />
         </div>
       </div>
 
-      <div className={pageStyles.sectionWhite}>
+      {/* <div className={pageStyles.sectionGray}>
+        <div className={pageStyles.container}>
+          <div className={gridStyles}>
+            <Documents />
+          </div>
+        </div>
+      </div> */}
+
+      <div className={pageStyles.sectionGray}>
         <div className={pageStyles.container}>
           <div className={gridStyles}>
             <DashboardOverview />
@@ -80,7 +87,26 @@ export default function Home() {
         </div>
       </div>
 
-      <NewsAnnouncements />
+      {/* News and Documents grid section */}
+      <div className={pageStyles.sectionWhite}>
+        <div className={pageStyles.container}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)',
+              gap: '32px',
+              width: '100%',
+              boxSizing: 'border-box',
+              overflow: 'hidden',
+            }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <NewsAnnouncements />
+            </div>
+            <Documents />
+          </div>
+        </div>
+      </div>
 
       <div className={pageStyles.sectionGray}>
         <div className={pageStyles.container}>

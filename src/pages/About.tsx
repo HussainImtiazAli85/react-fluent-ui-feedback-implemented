@@ -58,7 +58,7 @@ export default function About() {
               <Text variant="xxLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary } }}>
                 Our Mission
               </Text>
-              <Text variant="large" styles={{ root: { color: theme.palette.neutralSecondary, lineHeight: 1.6 } }}>
+              <Text variant="large" styles={{ root: { color: theme.palette.neutralSecondary} }}>
                 We are dedicated to delivering exceptional solutions that empower businesses and individuals to achieve their goals.
                 Through innovation, integrity, and collaboration, we create lasting value for our clients, employees, and communities.
               </Text>
@@ -112,12 +112,12 @@ export default function About() {
               Our Story
             </Text>
             <Stack tokens={{ childrenGap: 16 }}>
-              <Text variant="large" styles={{ root: { color: theme.palette.neutralSecondary, lineHeight: 1.6 } }}>
+              <Text variant="large" styles={{ root: { color: theme.palette.neutralSecondary } }}>
                 Founded with a vision to transform the industry, our company has grown from a small startup to a leading
                 organization serving clients worldwide. Our journey has been marked by continuous innovation, strategic
                 partnerships, and an unwavering commitment to excellence.
               </Text>
-              <Text variant="large" styles={{ root: { color: theme.palette.neutralSecondary, lineHeight: 1.6 } }}>
+              <Text variant="large" styles={{ root: { color: theme.palette.neutralSecondary } }}>
                 Today, we are proud to have a diverse team of experts working together to deliver solutions that make a
                 real difference. Our culture fosters creativity, encourages learning, and celebrates success at every level.
               </Text>

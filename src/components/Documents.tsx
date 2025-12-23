@@ -23,13 +23,13 @@ const getStyles = (theme: any) => mergeStyleSets({
     borderRadius: '12px',
     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
     border: `1px solid ${theme.palette.neutralQuaternaryAlt}`,
-    height: '100%',
+    height: '93%',
   },
   scrollContainer: {
     display: 'flex',
     flexDirection: 'column',
     gap: '12px',
-    maxHeight: '480px',
+    maxHeight: '400px',
     overflowY: 'auto',
     paddingRight: '4px',
     scrollbarWidth: 'thin',
@@ -88,9 +88,9 @@ export default function Documents() {
   const theme = useTheme();
   const styles = getStyles(theme);
 
-  useEffect(() => {
-    supabase.from('documents').select('*').limit(6).then(({ data }) => setDocuments(data || []));
-  }, []);
+    useEffect(() => {
+      supabase.from('documents').select('*').limit(3).then(({ data }) => setDocuments(data || []));
+    }, []);
 
   const formatFileSize = (bytes: number) => {
     if (bytes < 1024) return bytes + ' B';
@@ -113,7 +113,7 @@ export default function Documents() {
     <Stack tokens={{ childrenGap: 20 }} className={styles.container}>
       <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
         <Stack tokens={headerTokens}>
-          <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary } }}>
+          <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, fontSize: '24px' } }}>
             {t('documents.title')}
           </Text>
           <Text variant="small" styles={{ root: { color: theme.palette.neutralSecondary } }}>
@@ -128,7 +128,7 @@ export default function Documents() {
       </Stack>
 
       <div className={styles.scrollContainer}>
-        {documents.map((doc) => {
+        {documents.slice(0, 3).map((doc) => {
           const fileColor = getFileTypeColor(doc.file_type);
           return (
             <Stack

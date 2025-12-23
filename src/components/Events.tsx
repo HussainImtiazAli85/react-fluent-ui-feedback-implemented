@@ -131,7 +131,7 @@ export default function Events() {
     <Stack tokens={{ childrenGap: 20 }} className={styles.container}>
       <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
         <Stack tokens={headerTokens}>
-          <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary } }}>
+          <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, fontSize: '24px' } }}>
             {t('events.title')}
           </Text>
           <Text variant="small" styles={{ root: { color: theme.palette.neutralSecondary } }}>

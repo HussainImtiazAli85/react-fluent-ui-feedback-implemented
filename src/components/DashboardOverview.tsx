@@ -90,12 +90,9 @@ export default function DashboardOverview() {
     <Stack tokens={{ childrenGap: 24 }}>
       <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
         <Stack tokens={{ childrenGap: 8 }}>
-          <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, fontSize: '28px' } }}>
+          <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, fontSize: '24px' } }}>
             {t('dashboardOverview.title')}
           </Text>
-          {/* <Text variant="medium" styles={{ root: { color: theme.palette.neutralSecondary } }}>
-            {t('dashboardOverview.subtitle')}
-          </Text> */}
         </Stack>
         <a
           href="#"

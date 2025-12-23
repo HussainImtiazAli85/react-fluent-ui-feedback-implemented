@@ -178,13 +178,23 @@ export default function AnnouncementDetail() {
 
         <div className={styles.headerCard}>
           <Stack horizontal tokens={headerTokens} verticalAlign="start">
-            <div
-              className={styles.iconContainer}
-              style={{ backgroundColor: colors.bg }}
-            >
-              <Icon iconName={getIconName(announcement.category)} styles={{ root: { fontSize: 32, color: colors.icon } }} />
+            {/* News image section */}
+            <div style={{ marginRight: 32, minWidth: 180, maxWidth: 220 }}>
+              <img
+                src={announcement.image_url || 'https://source.unsplash.com/400x240/?news,office'}
+                alt="News"
+                style={{
+                  width: 200,
+                  height: 120,
+                  objectFit: 'cover',
+                  borderRadius: 10,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  border: `1px solid ${theme.palette.neutralQuaternaryAlt}`,
+                  background: '#f3f2f1',
+                  display: 'block',
+                }}
+              />
             </div>
-
             <Stack tokens={{ childrenGap: 12 }} styles={{ root: { flex: 1 } }}>
               <Stack horizontal tokens={{ childrenGap: 12 }} verticalAlign="center" wrap>
                 <div

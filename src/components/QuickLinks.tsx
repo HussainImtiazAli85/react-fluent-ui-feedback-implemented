@@ -11,7 +11,7 @@ import {
 } from '@fluentui/react';
 
 const sectionStyles = mergeStyles({
-  padding: '32px 24px 24px',
+  padding: '32px 0 0',
   backgroundColor: '#f3f2f1',
   position: 'relative',
 });
@@ -91,12 +91,12 @@ export default function QuickLinks() {
       if (error) throw error;
 
       const moreLinks = [
-        { id: 100, titleKey: 'quickLinks.employeeBenefits', description: '', icon: 'Heart', url: '#', order_index: 100 },
-        { id: 101, titleKey: 'quickLinks.timeOff', description: '', icon: 'calendar', url: '#', order_index: 101 },
-        { id: 102, titleKey: 'quickLinks.payroll', description: '', icon: 'Money', url: '#', order_index: 102 },
-        { id: 103, titleKey: 'quickLinks.performance', description: '', icon: 'Chart', url: '#', order_index: 103 },
-        { id: 104, titleKey: 'quickLinks.learningResources', description: '', icon: 'Education', url: '#', order_index: 104 },
-        { id: 105, titleKey: 'quickLinks.itSupport', description: '', icon: 'Settings', url: '#', order_index: 105 },
+        { id: 100, titleKey: 'quickLinks.employeeBenefits', descriptionKey: 'quickLinks.employeeBenefitsDesc', icon: 'Heart', url: '#', order_index: 100 },
+        { id: 101, titleKey: 'quickLinks.timeOff', descriptionKey: 'quickLinks.timeOffDesc', icon: 'Calendar', url: '#', order_index: 101 },
+        { id: 102, titleKey: 'quickLinks.payroll', descriptionKey: 'quickLinks.payrollDesc', icon: 'Money', url: '#', order_index: 102 },
+        { id: 103, titleKey: 'quickLinks.performance', descriptionKey: 'quickLinks.performanceDesc', icon: 'Chart', url: '#', order_index: 103 },
+        { id: 104, titleKey: 'quickLinks.learningResources', descriptionKey: 'quickLinks.learningResourcesDesc', icon: 'Education', url: '#', order_index: 104 },
+        { id: 105, titleKey: 'quickLinks.itSupport', descriptionKey: 'quickLinks.itSupportDesc', icon: 'Settings', url: '#', order_index: 105 },
       ];
 
       setLinks([...(data || []), ...moreLinks as any]);
@@ -109,7 +109,12 @@ export default function QuickLinks() {
 
   const scroll = (direction: 'left' | 'right') => {
     if (sliderRef.current) {
-      const scrollAmount = 300;
+      const card = sliderRef.current.querySelector('.card');
+      if (!card) return;
+      const cardWidth = (card as HTMLElement).offsetWidth + 21; // 21px gap
+      // Show 12 cards on desktop, 2 on mobile
+      const cardsToShow = window.innerWidth < 768 ? 2 : 12;
+      const scrollAmount = cardWidth * cardsToShow;
       sliderRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth',
@@ -148,96 +153,77 @@ export default function QuickLinks() {
     <section className={sectionStyles}>
       <div className={containerStyles}>
         <Stack tokens={{ childrenGap: 32 }}>
-          <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
-            {/* <Text
-              variant="xxLarge"
+          <div style={{ position: 'relative', width: '100%', display: 'flex', alignItems: 'center', minHeight: 80 }}>
+            <IconButton
+              className="quicklink-arrow quicklink-arrow-left"
+              iconProps={{ iconName: 'ChevronLeft' }}
+              onClick={() => scroll('left')}
               styles={{
                 root: {
-                  fontWeight: 600,
-                  color: '#323130',
-                  fontSize: '32px',
+                  position: 'absolute',
+                  left: 0,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  zIndex: 2,
+                  backgroundColor: '#fff',
+                  border: '1px solid #edebe9',
+                },
+                rootHovered: {
+                  backgroundColor: '#f3f2f1',
                 },
               }}
-            >
-              {t('quickLinks.title')}
-            </Text> */}
-            <Stack horizontal tokens={{ childrenGap: 8 }}>
-              <IconButton
-                className="quicklink-arrow quicklink-arrow-left"
-                iconProps={{ iconName: 'ChevronLeft' }}
-                onClick={() => scroll('left')}
-                styles={{
-                  root: {
-                    backgroundColor: '#fff',
-                    border: '1px solid #edebe9',
-                  },
-                  rootHovered: {
-                    backgroundColor: '#f3f2f1',
-                  },
-                }}
-              />
-              <IconButton
-                className="quicklink-arrow quicklink-arrow-right"
-                iconProps={{ iconName: 'ChevronRight' }}
-                onClick={() => scroll('right')}
-                styles={{
-                  root: {
-                    backgroundColor: '#fff',
-                    border: '1px solid #edebe9',
-                  },
-                  rootHovered: {
-                    backgroundColor: '#f3f2f1',
-                  },
-                }}
-              />
-            </Stack>
-          </Stack>
-
-          <div className={sliderContainerStyles}>
-            <div ref={sliderRef} className={sliderStyles}>
-              {links.map((link) => (
-                <a
-                  key={link.id}
-                  href={link.url}
-                  className={`${cardStyles} card`}
-                  style={{ textDecoration: 'none' }}
-                >
-                  <div className={iconContainerStyles}>
-                    <Icon iconName={getIconName(link.icon)} styles={{ root: { fontSize: 24 } }} />
-                  </div>
-                  <Text
-                    variant="medium"
-                    styles={{
-                      root: {
-                        fontWeight: 600,
-                        color: '#323130',
-                        marginBottom: '4px',
-                        display: 'block',
-                      },
-                    }}
+            />
+            <div ref={sliderRef} className={sliderStyles} style={{ flex: 1, margin: '0 40px' }}>
+              {links.map((link) => {
+                const label = (link as any).titleKey ? t((link as any).titleKey) : link.title;
+                const desc = (link as any).descriptionKey ? t((link as any).descriptionKey) : link.description;
+                return (
+                  <a
+                    key={link.id}
+                    href={link.url}
+                    className={`${cardStyles} card`}
+                    style={{ textDecoration: 'none' }}
                   >
-                    {(link as any).titleKey ? t((link as any).titleKey) : link.title}
-                  </Text>
-                  {link.description && (
+                    <div className={iconContainerStyles}>
+                      <Icon iconName={getIconName(link.icon) || 'Link'} styles={{ root: { fontSize: 24 } }} />
+                    </div>
                     <Text
-                      variant="small"
+                      variant="medium"
                       styles={{
                         root: {
-                          color: '#605e5c',
+                          fontWeight: 600,
+                          color: '#323130',
+                          marginBottom: '4px',
                           display: 'block',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
                         },
                       }}
                     >
-                      {link.description}
+                      {label}
                     </Text>
-                  )}
-                </a>
-              ))}
+                    {/* Description hidden as per request */}
+                  </a>
+                );
+              })}
             </div>
+            <IconButton
+              className="quicklink-arrow quicklink-arrow-right"
+              iconProps={{ iconName: 'ChevronRight' }}
+              onClick={() => scroll('right')}
+              styles={{
+                root: {
+                  position: 'absolute',
+                  right: 0,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  zIndex: 2,
+                  backgroundColor: '#fff',
+                  border: '1px solid #edebe9',
+                },
+                rootHovered: {
+                  backgroundColor: '#f3f2f1',
+                },
+              }}
+            />
           </div>
         </Stack>
       </div>

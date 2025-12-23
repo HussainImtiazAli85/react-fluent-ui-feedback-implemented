@@ -33,6 +33,12 @@
     "explore": "استكشف الموارد"
   },
   "quickLinks": {
+      "employeeBenefitsDesc": "عرض باقة مزاياك",
+      "timeOffDesc": "طلب إجازة مرضية أو سنوية",
+      "payrollDesc": "عرض قسائم الرواتب",
+      "performanceDesc": "تتبع مراجعات الأداء",
+      "learningResourcesDesc": "موارد التعلم عبر الإنترنت",
+      "itSupportDesc": "إرسال ومتابعة التذاكر",
     "title": "روابط سريعة",
     "helpCenter": "مركز المساعدة",
     "hr": "بوابة الموارد البشرية",

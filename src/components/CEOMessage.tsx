@@ -30,7 +30,7 @@ export default function CEOMessage() {
     <Stack tokens={{ childrenGap: 24 }}>
       <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
         <Stack tokens={{ childrenGap: 8 }}>
-          <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, fontSize: '28px' } }}>
+          <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, fontSize: '24px' } }}>
             {t('ceoMessage.title')}
           </Text>
           {/* <Text variant="medium" styles={{ root: { color: theme.palette.neutralSecondary } }}>

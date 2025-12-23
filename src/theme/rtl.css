@@ -55,13 +55,11 @@ button.ms-Button.ms-Button--icon.quicklink-arrow.quicklink-arrow-right{
     margin-right: 2px;
 }
 
-button.ms-Button.ms-Button--icon.quicklink-arrow.quicklink-arrow-left {
-    margin-left: -72px;
-}
 
-button.ms-Button.ms-Button--icon.quicklink-arrow.quicklink-arrow-right {
+
+/* button.ms-Button.ms-Button--icon.quicklink-arrow.quicklink-arrow-right {
     margin-left: 52px;
-}
+} */
 
 .footer-logo.css-180 {
     gap: 10px;

@@ -71,35 +71,35 @@ const headerTokens: IStackTokens = { childrenGap: 4 };
 const cardTokens: IStackTokens = { childrenGap: 12 };
 const infoTokens: IStackTokens = { childrenGap: 2 };
 
-const dummyHires: NewHire[] = [
-  {
-    id: 'dummy-1',
-    name: 'Sarah Johnson',
-    position: 'Senior Product Designer',
-    department: 'Product & Design',
-    start_date: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
-    bio: 'Passionate about creating intuitive user experiences and design systems that scale.',
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 'dummy-2',
-    name: 'Michael Chen',
-    position: 'Full Stack Developer',
-    department: 'Engineering',
-    start_date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
-    bio: 'Experienced in building scalable web applications with modern frameworks and cloud technologies.',
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 'dummy-3',
-    name: 'Emma Rodriguez',
-    position: 'Marketing Manager',
-    department: 'Marketing & Communications',
-    start_date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    bio: 'Driving brand growth through data-driven strategies and creative storytelling.',
-    created_at: new Date().toISOString(),
-  },
-];
+// const dummyHires: NewHire[] = [
+//   {
+//     id: 'dummy-1',
+//     name: 'Sarah Johnson',
+//     position: 'Senior Product Designer',
+//     department: 'Product & Design',
+//     start_date: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+//     bio: 'Passionate about creating intuitive user experiences and design systems that scale.',
+//     created_at: new Date().toISOString(),
+//   },
+//   {
+//     id: 'dummy-2',
+//     name: 'Michael Chen',
+//     position: 'Full Stack Developer',
+//     department: 'Engineering',
+//     start_date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
+//     bio: 'Experienced in building scalable web applications with modern frameworks and cloud technologies.',
+//     created_at: new Date().toISOString(),
+//   },
+//   {
+//     id: 'dummy-3',
+//     name: 'Emma Rodriguez',
+//     position: 'Marketing Manager',
+//     department: 'Marketing & Communications',
+//     start_date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+//     bio: 'Driving brand growth through data-driven strategies and creative storytelling.',
+//     created_at: new Date().toISOString(),
+//   },
+// ];
 
 export default function NewHires() {
   const { t } = useTranslation();
@@ -111,7 +111,7 @@ export default function NewHires() {
   useEffect(() => {
     supabase.from('new_hires').select('*').order('start_date', { ascending: false }).limit(2).then(({ data }) => {
       if (!data || data.length === 0) {
-        setHires(dummyHires.slice(0, 4));
+        setHires([].slice(0, 4));
       } else {
         setHires(data);
       }
@@ -127,7 +127,7 @@ export default function NewHires() {
     <Stack tokens={{ childrenGap: 20 }} className={styles.container}>
       <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
         <Stack tokens={headerTokens}>
-          <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary } }}>
+          <Text variant="xLarge" styles={{ root: { fontWeight: 600, color: theme.palette.neutralPrimary, fontSize: '24px' } }}>
             {t('newHires.title')}
           </Text>
           <Text variant="small" styles={{ root: { color: theme.palette.neutralSecondary } }}>

@@ -180,7 +180,7 @@ export default function DepartmentDetail() {
                     Our Mission
                   </Text>
                 </Stack>
-                <Text variant="medium" styles={{ root: { color: theme.palette.neutralSecondary, lineHeight: 1.6 } }}>
+                <Text variant="medium" styles={{ root: { color: theme.palette.neutralSecondary } }}>
                   {dept.mission}
                 </Text>
               </Stack>

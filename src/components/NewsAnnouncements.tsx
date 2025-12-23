@@ -7,7 +7,7 @@ import { Stack, Text, Icon, mergeStyles, useTheme } from '@fluentui/react';
 
 const sectionStyles = mergeStyles({
   padding: '32px 24px',
-  backgroundColor: '#f3f2f1',
+  //backgroundColor: '#f3f2f1',
 });
 
 const containerStyles = mergeStyles({
@@ -130,7 +130,7 @@ export default function NewsAnnouncements() {
         <Stack tokens={{ childrenGap: 32 }}>
           <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
             <Stack tokens={{ childrenGap: 8 }}>
-              <Text variant="xxLarge" styles={{ root: { fontWeight: 700, color: theme.palette.neutralPrimary } }}>
+              <Text variant="xxLarge" styles={{ root: { fontWeight: 700, color: theme.palette.neutralPrimary, fontSize: '24px' } }}>
                 {t('news.title')}
               </Text>
               <Text variant="large" styles={{ root: { color: theme.palette.neutralSecondary } }}>
@@ -166,7 +166,7 @@ export default function NewsAnnouncements() {
             scrollbarWidth: 'thin',
             scrollbarColor: '#0078d4 #f3f2f1',
           }}>
-            {news.map((item, index) => (
+            {news.slice(0, 2).map((item, index) => (
               <div
                 key={item.id}
                 className={cardStyles}

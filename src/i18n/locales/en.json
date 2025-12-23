@@ -33,6 +33,12 @@
     "explore": "Explore Resources"
   },
   "quickLinks": {
+      "employeeBenefitsDesc": "View your benefits package",
+      "timeOffDesc": "Request vacation and sick days",
+      "payrollDesc": "View your payslips",
+      "performanceDesc": "Track your performance reviews",
+      "learningResourcesDesc": "Online learning resources",
+      "itSupportDesc": "Submit and track tickets",
     "title": "Quick Links",
     "hr": "HR Portal",
     "it": "IT Support",
